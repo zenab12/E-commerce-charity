@@ -4,6 +4,8 @@ const ApiError = require("../utils/ApiError");
 const { v4: uuid4 } = require("uuid");
 const multer = require("multer");
 const sharp = require("sharp/lib/sharp");
+const bcrypt = require('bcryptjs');
+
 // import sharp from "sharp";
 // const storageMulter = multer.diskStorage({
 //   destination: function (req, file, cb) {
@@ -47,7 +49,7 @@ const uploadUserImg = upload.single("profileImg");
 const createUser = expressAsyncHandler(async (req, res, next) => {
   const name = req.body.name;
   const email = req.body.email;
-  const password = req.body.password;
+  const password = await bcrypt.hash( req.body.password, 10);
   const gender = req.body.gender;
   const phone = req.body.phone;
   const address = req.body.address;
@@ -131,7 +133,7 @@ const getUser = expressAsyncHandler(async (req, res, next) => {
 const updateUser = expressAsyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const name = req.body.name;
-  const password = req.body.password;
+  const password = await bcrypt.hash( req.body.password, 10);
   const phone = req.body.phone;
   const address = req.body.address;
   const user = await User.findOneAndUpdate(

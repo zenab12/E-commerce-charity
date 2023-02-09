@@ -4,6 +4,7 @@ let fs = require("fs");
 let path = require("path");
 const app = express();
 const userRouter = require("./routes/userRoutes");
+const authRouter = require("./routes/auth");
 const dotenv = require("dotenv");
 const ApiError = require("./utils/ApiError");
 const globalErr = require("./middlewares/error");
@@ -23,7 +24,7 @@ app.use(bodyParser.json());
 
 //routes
 app.use("/users", userRouter);
-
+app.use("/auth", authRouter);
 //route is not exist
 app.all("*", (req, res, next) => {
   //create error
