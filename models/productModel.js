@@ -1,5 +1,6 @@
 const mongoose=require('mongoose');
 const { stringify } = require('querystring');
+const { Schema } = mongoose;
 
 const productSchema= new mongoose.Schema({
     title:{
@@ -43,12 +44,12 @@ const productSchema= new mongoose.Schema({
     images:[String],  // inner photos
     // category
     category:{
-        type:mongoose.Schema.objectId,
+        type: Schema.Types.ObjectId, //mongoose.Schema.objectId,
         ref:'Category',
         require:[true,'Product must belong to category']
     },
     brand:{
-        type:mongoose.Schema.objectId,
+        type: Schema.Types.ObjectId, //mongoose.Schema.objectId,
         ref:'Brand'
     },
     ratingAverage:{

@@ -34,7 +34,8 @@ exports.createProductValidator = [
     .isLength({ max: 20 })
     .withMessage("too long price"),
 
-  check("priceAfterDiscount")
+
+    check('priceAfterDiscount')
     .optional()
     .isNumeric()
     .withMessage("Product priceAfterDiscount Must Be a Number")
@@ -48,7 +49,7 @@ exports.createProductValidator = [
 
   check("imageCover").notEmpty().withMessage("Product imageCover is required"),
 
-  check("images")
+    check('images')
     .optional()
     .isArray()
     .withMessage("images should be array of string"),
@@ -65,7 +66,8 @@ exports.createProductValidator = [
     .isMongoId()
     .withMessage("Invalid ID Formate"),
 
-  check("ratingAverage")
+
+    check('ratingAverage')
     .optional()
     .isNumeric()
     .withMessage("ratingAverage Must Be a Number")
