@@ -1,13 +1,21 @@
-const {check} =require('express-validator');
+const {check ,body} =require('express-validator');
+const { default: slugify } = require('slugify');
 
 const ValidatorMiddleware =require('../../middlewares/validator');
+const CategoryModel=require('../../models/categoryModel'); 
+
+
 
 exports.createProductValidator=[
     check('title')
     .isLength({min : 3})
     .withMessage('Product title should be more than 3 characters ')
     .notEmpty()
-    .withMessage('Product title is required'),
+    .withMessage('Product title is required')
+    .custom((value, {req}) => {
+        req.body.slug=slugify(value);
+        return true;
+    }),
 
     check('description')
     .notEmpty()
@@ -22,7 +30,7 @@ exports.createProductValidator=[
     .withMessage('Product quantity Must Be a Number'),    
 
     check('sold')
-    .optionl()
+    .optional()
     .isNumeric()
     .withMessage('Product quantity Must Be a Number'),  
 
@@ -35,7 +43,7 @@ exports.createProductValidator=[
     .withMessage('too long price'), 
 
     check('priceAfterDiscount')
-    .optionl()
+    .optional()
     .isNumeric()
     .withMessage('Product priceAfterDiscount Must Be a Number')
     .isFloat()
@@ -51,7 +59,7 @@ exports.createProductValidator=[
     .withMessage('Product imageCover is required'),
 
     check('images')
-    .optionl()
+    .optional()
     .isArray()
     .withMessage('images should be array of string'),
 
@@ -59,7 +67,12 @@ exports.createProductValidator=[
     .notEmpty()
     .withMessage('Product category is required')
     .isMongoId()
-    .withMessage('Invalid ID Formate'),
+    .withMessage('Invalid ID Formate')
+    .custom((categoryid)=>CategoryModel.findById(categoryid)
+           .then((category)=>{
+            if(!category){
+           return Promise.reject(new Error(`No category For this id: ${categoryid}`));
+        }})),
 
     check('brand')
     .notEmpty()
@@ -68,14 +81,13 @@ exports.createProductValidator=[
     .withMessage('Invalid ID Formate'),
 
     check('ratingAverage')
-    .optionl()
+    .optional()
     .isNumeric()
     .withMessage('ratingAverage Must Be a Number')
     .isLength({min : 1})
     .withMessage('Rating must be above or equal 1')
     .isLength({max : 5})
     .withMessage('Rating must be below or equal 5'),
-
     ValidatorMiddleware,
 
 ];
@@ -91,7 +103,13 @@ exports.updateProductValidator=[
     check('id')
     .isMongoId()
     .withMessage('Invalid ID Formate'),
-    ValidatorMiddleware,
+    body('title')
+       .optional()
+       .custom((value, {req}) => {
+        req.body.slug=slugify(value);
+        return true;
+    }),
+    ValidatorMiddleware, 
 ];
 
 exports.deteleProductValidator=[
