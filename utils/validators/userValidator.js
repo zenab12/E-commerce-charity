@@ -1,6 +1,7 @@
-const { check } = require("express-validator");
+const { check, body } = require("express-validator");
+const { default: slugify } = require("slugify");
 const validatorMiddleware = require("../../middlewares/validator");
-
+const User = require("../../models/userModel");
 const getUserValidator = [
   check("id").isMongoId().withMessage("invalid user id"),
   validatorMiddleware,
@@ -13,28 +14,63 @@ const createUserValidator = [
     .isLength({ min: 3 })
     .withMessage("user name is so short ")
     .isLength({ max: 20 })
-    .withMessage("too long username"),
+    .withMessage("too long username")
+    .custom((val, { req }) => {
+      req.body.slug = slugify(val);
+      return true;
+    }),
+  check("email")
+    .notEmpty()
+    .withMessage("email is required")
+    .isEmail()
+    .withMessage("email address is invalid")
+    .custom(async (val, { req }) => {
+      User.findOne({ email: val }).then((User) => {
+        if (User) {
+          return Promise.reject("email already exists");
+        } else {
+          return true;
+        }
+      });
+    }),
+  check("phone")
+    .optional()
+    .isMobilePhone([
+      "ar-EG",
+      "ar-JO",
+      "ar-AE",
+      "ar-BH",
+      "ar-DZ",
+      "ar-SA",
+      "ar-LB",
+      "ar-LY",
+      "ar-OM",
+      "ar-PS",
+    ])
+    .withMessage("invalid phone number accept only arabic countries numbers"),
+  check("password")
+    .notEmpty()
+    .withMessage("password is required")
+    .isLength({ min: 6 })
+    .withMessage("min length for password is 6 "),
+  check("profileImg").optional(),
+  check("role").optional(),
+
   validatorMiddleware,
 ];
 
 const updateUserValidator = [
-  check("name")
-    .notEmpty()
-    .withMessage("user name is required")
-    .isLength({ min: 3 })
-    .withMessage("user name is so short ")
-    .isLength({ max: 20 })
-    .withMessage("too long username"),
+  check("id").isMongoId().withMessage("invalid id format"),
+  body("name")
+    .optional()
+    .custom((val, { req }) => {
+      req.body.slug = slugify(val);
+      return true;
+    }),
   validatorMiddleware,
 ];
 const deleteUserValidator = [
-  check("name")
-    .notEmpty()
-    .withMessage("user name is required")
-    .isLength({ min: 3 })
-    .withMessage("user name is so short ")
-    .isLength({ max: 20 })
-    .withMessage("too long username"),
+  check("id").isMongoId().withMessage("invalid id format"),
   validatorMiddleware,
 ];
 module.exports = {

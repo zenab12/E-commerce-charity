@@ -18,12 +18,18 @@ router
       console.log(req.body);
       next();
     },
+    userValidator.createUserValidator,
     userController.createUser
   );
 router
   .route("/:id")
   .get(userValidator.getUserValidator, userController.getUser)
-  .put(userController.updateUser)
-  .delete(userController.deleteUser);
+  .put(
+    userController.uploadUserImg,
+    userController.resizeUserImg,
+    userValidator.updateUserValidator,
+    userController.updateUser
+  )
+  .delete(userValidator.deleteUserValidator, userController.deleteUser);
 
 module.exports = router;

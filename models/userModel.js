@@ -48,6 +48,8 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "default.jpg",
     },
+    active: { type: Boolean, default: true },
+
     //we will make seperated image model
     cart: {
       type: Array,
@@ -73,10 +75,26 @@ const userSchema = new mongoose.Schema(
     //   passwordChangedAt: {},
     //   passwordResetToken: {},
     //   passwordResetExpires: {},
-    //   active: {},
   },
   { timestamps: true }
 );
+
+const setImgUrl = (doc) => {
+  //return iage base url + image name
+  if (doc.profileImg) {
+    const imgUrl = `${process.env.BASE_URL}/users/${doc.profileImg}`;
+    doc.profileImg = imgUrl;
+  }
+};
+
+userSchema.post("init", (doc) => {
+  //return iage base url + image name
+  setImgUrl(doc);
+});
+
+userSchema.post("save", (doc) => {
+  setImgUrl(doc);
+});
 
 const User = mongoose.model("User", userSchema);
 module.exports = User;

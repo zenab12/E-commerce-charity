@@ -8,6 +8,7 @@ const dotenv = require("dotenv");
 const ApiError = require("./utils/ApiError");
 const globalErr = require("./middlewares/error");
 const { Server } = require("http");
+const { dirname } = require("path");
 require("dotenv/config");
 dotenv.config({ path: "./config.env" });
 const port = process.env.PORT;
@@ -16,7 +17,7 @@ const port = process.env.PORT;
 require("./config/database")();
 
 //some configs to deal with req.body as json and deal with any assets without full path
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "uploads")));
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
