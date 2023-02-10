@@ -4,14 +4,14 @@ const authController = require("./../controllers/auth");
 const router = express.Router();
 const userValidator = require("../utils/validators/userValidator");
 
-const { protect } = require('./../middlewares/auth');
+const { protect, authorize } = require('./../middlewares/auth');
 // router.get("/", userController.getUsers);
 // //create user and test users db
 // router.post("/", userController.createUser);
 
 router
   .route("/")
-  .get(userController.getUsers)
+  .get(protect, authorize("admin"),userController.getUsers)
   .post(
     // userController.uploadUserImg,
     // userController.resizeUserImg,
@@ -20,13 +20,13 @@ router
     //   console.log(req.body);
     //   next();
     // },
-    userController.createUser
+    protect, authorize("admin"),userController.createUser
   );
 router
   .route("/:id")
-  .get(userValidator.getUserValidator, userController.getUser)
-  .put(userController.updateUser)
-  .delete(userController.deleteUser);
+  .get(userValidator.getUserValidator, protect, authorize("admin"),userController.getUser)
+  .put(protect, authorize("admin"), userController.updateUser)
+  .delete(protect, authorize("admin"), userController.deleteUser);
 
   router.post('/login',authController.login)
   router.post('/register',authController.register)
