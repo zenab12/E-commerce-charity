@@ -1,15 +1,17 @@
 const express = require("express");
 const userController = require("./../controllers/userController");
+const authController = require("./../controllers/auth");
 const router = express.Router();
 const userValidator = require("../utils/validators/userValidator");
 
+const { protect, authorize } = require('./../middlewares/auth');
 // router.get("/", userController.getUsers);
 // //create user and test users db
 // router.post("/", userController.createUser);
 
 router
   .route("/")
-  .get(userController.getUsers)
+  .get(protect, authorize("admin"),userController.getUsers)
   .post(
     userController.uploadUserImg,
     userController.resizeUserImg,
@@ -18,18 +20,21 @@ router
       console.log(req.body);
       next();
     },
-    userValidator.createUserValidator,
-    userController.createUser
+      userValidator.createUserValidator,
+        protect, authorize("admin"),userController.createUser,
   );
 router
   .route("/:id")
-  .get(userValidator.getUserValidator, userController.getUser)
+  .get(userValidator.getUserValidator, protect, authorize("admin"), userController.getUser)
   .put(
     userController.uploadUserImg,
     userController.resizeUserImg,
-    userValidator.updateUserValidator,
+    userValidator.updateUserValidator, protect,
     userController.updateUser
   )
-  .delete(userValidator.deleteUserValidator, userController.deleteUser);
+  .delete(userValidator.deleteUserValidator, protect, authorize("admin"), userController.deleteUser);
+
+  router.post('/login',authController.login)
+  router.post('/register',authController.register)
 
 module.exports = router;
