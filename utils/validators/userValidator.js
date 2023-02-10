@@ -7,6 +7,29 @@ const getUserValidator = [
   validatorMiddleware,
 ];
 
+const loginValidator = [
+
+  check("email")
+    .notEmpty()
+    .withMessage("email is required")
+    .isEmail()
+    .withMessage("email address is invalid")
+    .custom(async (val, { req }) => {
+      User.findOne({ email: val }).then((User) => {
+        if (User) {
+          return Promise.reject("email already exists");
+        } else {
+          return true;
+        }
+      });
+    }),
+
+
+
+
+  validatorMiddleware,
+];
+
 const createUserValidator = [
   check("name")
     .notEmpty()
@@ -78,4 +101,5 @@ module.exports = {
   createUserValidator,
   updateUserValidator,
   deleteUserValidator,
+  loginValidator,
 };

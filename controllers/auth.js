@@ -12,19 +12,22 @@ const jwt = require('jsonwebtoken');
 //@access public
 
 exports.register = expressAsyncHandler(async (req, res, next) => {
-    const name = req.body.name;
-    const email = req.body.email;
-    const password = await bcrypt.hash( req.body.password, 10);
-    const gender = req.body.gender;
-    const phone = req.body.phone;
-    const address = req.body.address;
+    // const name = req.body.name;
+    // const email = req.body.email;
+    // const password = await bcrypt.hash( req.body.password, 10);
+    // const gender = req.body.gender;
+    // const phone = req.body.phone;
+    // const address = req.body.address;
+    // const user = await User.create({
+    //     name,
+    //     email,
+    //     password,
+    //     gender,
+    //     phone,
+    //     address,
+    // });
     const user = await User.create({
-        name,
-        email,
-        password,
-        gender,
-        phone,
-        address,
+        ...req.body,
     });
 
     res.status(201).json({
