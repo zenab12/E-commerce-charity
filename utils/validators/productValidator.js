@@ -22,7 +22,7 @@ exports.createProductValidator=[
     .withMessage('Product quantity Must Be a Number'),    
 
     check('sold')
-    .optionl()
+    .optional()
     .isNumeric()
     .withMessage('Product quantity Must Be a Number'),  
 
@@ -35,7 +35,7 @@ exports.createProductValidator=[
     .withMessage('too long price'), 
 
     check('priceAfterDiscount')
-    .optionl()
+    .optional()
     .isNumeric()
     .withMessage('Product priceAfterDiscount Must Be a Number')
     .isFloat()
@@ -51,7 +51,7 @@ exports.createProductValidator=[
     .withMessage('Product imageCover is required'),
 
     check('images')
-    .optionl()
+    .optional()
     .isArray()
     .withMessage('images should be array of string'),
 
@@ -68,7 +68,7 @@ exports.createProductValidator=[
     .withMessage('Invalid ID Formate'),
 
     check('ratingAverage')
-    .optionl()
+    .optional()
     .isNumeric()
     .withMessage('ratingAverage Must Be a Number')
     .isLength({min : 1})

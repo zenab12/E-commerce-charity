@@ -4,14 +4,14 @@ const {getBrandValidator,
     createBrandValidator,
     updateBrandValidator,
     deteleBrandValidator}
-    =require('../utils/validators/categoryValidator');
+    =require('../utils/validators/brandValidator'); //'../utils/validators/categoryValidator'
 
 const {getBrands,
        getBrand,
        createBrand,
        updateBrand,
        deteleBrand}
-       =require('../controllers/categoryService');
+       =require('../controllers/brandService');
 
 const router = express.Router();
 
