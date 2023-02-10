@@ -8,10 +8,10 @@ const { protect, authorize } = require('./../middlewares/auth');
 // router.get("/", userController.getUsers);
 // //create user and test users db
 // router.post("/", userController.createUser);
-
+const { hash } = require('../middlewares/auth')
 router
   .route("/")
-  .get(protect, authorize("admin"),userController.getUsers)
+  .get(protect,userController.getUsers)
   .post(
     userController.uploadUserImg,
     userController.resizeUserImg,
@@ -20,8 +20,8 @@ router
       console.log(req.body);
       next();
     },
-      userValidator.createUserValidator,
-        protect, authorize("admin"),userController.createUser,
+      userValidator.createUserValidator,hash,
+/*protect, authorize("admin"),*/userController.createUser,
   );
 router
   .route("/:id")
@@ -29,12 +29,12 @@ router
   .put(
     userController.uploadUserImg,
     userController.resizeUserImg,
-    userValidator.updateUserValidator, protect,
+    userValidator.updateUserValidator, hash, protect,
     userController.updateUser
   )
   .delete(userValidator.deleteUserValidator, protect, authorize("admin"), userController.deleteUser);
 
-  router.post('/login',authController.login)
-  router.post('/register',authController.register)
+  // router.post('/login',authController.login)
+  // router.post('/register',authController.register)
 
 module.exports = router;

@@ -39,11 +39,8 @@ const resizeUserImg = expressAsyncHandler(async (req, res, next) => {
 //@route POST /users
 //@access public
 const createUser = expressAsyncHandler(async (req, res, next) => {
- 
-  const password = await bcrypt.hash( req.body.password, 10);
   
   const user = await User.create({
-    password,
     ...req.body,
   });
 

@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken')
 const expressAsyncHandler = require("express-async-handler");
 const ApiError = require("../utils/ApiError");
 const User = require("./../models/userModel");
-
+const bcrypt = require('bcryptjs');
 exports.protect = expressAsyncHandler(async(req, res, next)=>{
     let token;
     if(req.headers.authorization && req.headers.authorization.startsWith('Barer')){
@@ -40,3 +40,8 @@ exports.authorize = (...roles)=>{
             next();
         }
 }
+
+exports.hash =  expressAsyncHandler(async(req, res, next)=>{
+        req.body.password = await bcrypt.hash( req.body.password, 10);
+        next();
+})
