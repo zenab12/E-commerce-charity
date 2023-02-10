@@ -1,4 +1,5 @@
 const express = require("express");
+const morgan = require('morgan');
 let bodyParser = require("body-parser");
 let fs = require("fs");
 let path = require("path");
@@ -23,6 +24,9 @@ app.use(bodyParser.json());
 
 //routes
 app.use("/users", userRouter);
+const categoryRoute=require('./routes/categoryRoute');
+const productRoute=require('./routes/productRoute');
+const brandtRoute=require('./routes/brandRoute');
 
 //route is not exist
 app.all("*", (req, res, next) => {
