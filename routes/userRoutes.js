@@ -13,20 +13,26 @@ router
   .route("/")
   .get(protect, authorize("admin"),userController.getUsers)
   .post(
-    // userController.uploadUserImg,
-    // userController.resizeUserImg,
-    // (req, res, next) => {
-    //   console.log(req.file);
-    //   console.log(req.body);
-    //   next();
-    // },
-    protect, authorize("admin"),userController.createUser
+    userController.uploadUserImg,
+    userController.resizeUserImg,
+    (req, res, next) => {
+      console.log(req.file);
+      console.log(req.body);
+      next();
+    },
+      userValidator.createUserValidator,
+        protect, authorize("admin"),userController.createUser,
   );
 router
   .route("/:id")
-  .get(userValidator.getUserValidator, protect, authorize("admin"),userController.getUser)
-  .put(protect, authorize("admin"), userController.updateUser)
-  .delete(protect, authorize("admin"), userController.deleteUser);
+  .get(userValidator.getUserValidator, protect, authorize("admin"), userController.getUser)
+  .put(
+    userController.uploadUserImg,
+    userController.resizeUserImg,
+    userValidator.updateUserValidator, protect,
+    userController.updateUser
+  )
+  .delete(userValidator.deleteUserValidator, protect, authorize("admin"), userController.deleteUser);
 
   router.post('/login',authController.login)
   router.post('/register',authController.register)

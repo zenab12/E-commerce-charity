@@ -1,4 +1,5 @@
 const express = require("express");
+const morgan = require('morgan');
 let bodyParser = require("body-parser");
 let fs = require("fs");
 let path = require("path");
@@ -9,6 +10,7 @@ const dotenv = require("dotenv");
 const ApiError = require("./utils/ApiError");
 const globalErr = require("./middlewares/error");
 const { Server } = require("http");
+const { dirname } = require("path");
 require("dotenv/config");
 dotenv.config({ path: "./config.env" });
 const port = process.env.PORT;
@@ -17,7 +19,7 @@ const port = process.env.PORT;
 require("./config/database")();
 
 //some configs to deal with req.body as json and deal with any assets without full path
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "uploads")));
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -25,6 +27,11 @@ app.use(bodyParser.json());
 //routes
 app.use("/users", userRouter);
 app.use("/auth", authRouter);
+
+const categoryRoute=require('./routes/categoryRoute');
+const productRoute=require('./routes/productRoute');
+const brandtRoute=require('./routes/brandRoute');
+
 //route is not exist
 app.all("*", (req, res, next) => {
   //create error
