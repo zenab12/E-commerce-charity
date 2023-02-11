@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken')
 const expressAsyncHandler = require("express-async-handler");
 const ApiError = require("../utils/ApiError");
-const User = require("./../models/userModel");
+const User = require("../models/userModel");
 const bcrypt = require('bcryptjs');
 exports.protect = expressAsyncHandler(async(req, res, next)=>{
     let token;
@@ -18,10 +18,11 @@ exports.protect = expressAsyncHandler(async(req, res, next)=>{
         return next(new ApiError("Not authorized access",401))
     }
     try{
-        const decoded = jwt.verify(token,process.env.JWT_SECRET);
-        console.log(decoded);
-        req.user = await User.findById(decoded.userId);
-        console.log(req.user)
+        const {userId} = jwt.verify(token,process.env.JWT_SECRET);
+        console.log(userId);
+        req.user = await User.findById(userId);
+        // console.log("this is from protect middleware : " + req.user);
+        console.log("this is from protect middleware : " , req.user._id);
         next();
     }catch (err){
         return next(new ApiError("Not authorized access",401))
@@ -32,7 +33,6 @@ exports.protect = expressAsyncHandler(async(req, res, next)=>{
 
 // Grant access to specific roles
 exports.authorize = (...roles)=>{
-    console.log(roles);
     return (req, res, next)=>{
         if(!roles.includes(req.user.role)){
             return next(new ApiError(`user role ${req.user.role} is not authorized to access this route`,403));
