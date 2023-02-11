@@ -2,7 +2,12 @@ const { default: slugify } = require('slugify');
 const asyncHandler = require('express-async-handler')
 const CategoryModel = require('../models/categoryModel');
 
-const factory=require('../utils/factory');
+const ApiError = require('../utils/ApiError');
+const ApiFeature = require('../utils/apiFeature');
+
+
+const factory=require('./handlersFactory');
+
 
 //All Categories
 exports.getCategories =factory.getAll(CategoryModel);

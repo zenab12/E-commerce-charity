@@ -1,6 +1,8 @@
 const asyncHandler = require('express-async-handler');
-// const ApiError = require('express-async-handler');
-// const apiFeature = require('express-async-handler');
+const ApiError = require('../utils/ApiError');
+const ApiFeature = require('../utils/apiFeature');
+
+
 
 exports.deleteOne = (Model) => 
     asyncHandler(async (req, res) => {
@@ -42,21 +44,34 @@ exports.getOne = (Model) =>
         const {id}=req.params;
         const document = await Model.find(id);
         if(!document){
-            res.status(404).json({msg:`No document For the is id : ${id} `})
+            return next(new ApiError(`No document For the is id :${id}`,404));
         }
         res.status(200).json({data:document});
     });
 
 
 exports.getAll = (Model) => 
-asyncHandler (async(req, res) => {
-    // pagenation
+asyncHandler (async(req, res, next) => {
+    //1)Filtering 
+    const queryStringObj={...req.query};
+    const encludesFields=['page','sort','limit','fields'];
+    encludesFields.forEach((field)=> delete queryStringObj[field]);
+
+    //2)pagenation
     const page =req.query.page * 1 || 1;
     const limit=req.query.limit*1 ;
     const skip=(page-1)*limit;
-                                                   // attach pagenation
-    const document = await Model.find({}).skip(skip).limit(limit);
+
+    //3)build query
+    const mongooseQuery = Model.find(queryStringObj)
+    .skip(skip)
+    .limit(limit);
+
+    //4)execute query
+    const products= await mongooseQuery;
+
     res.status(200).json({result:document.length, page, data:document});
+
 });
 
     

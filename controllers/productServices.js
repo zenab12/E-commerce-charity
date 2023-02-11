@@ -2,7 +2,11 @@ const { default: slugify } = require('slugify');
 const asyncHandler = require('express-async-handler')
 const productModel = require('../models/productModel');
 
-const factory=require('../utils/factory');
+const ApiError = require('../utils/ApiError');
+const ApiFeature = require('../utils/apiFeature');
+
+
+const factory=require('./handlersFactory');
 
 //All products
 exports.getproducts = factory.getAll(productModel);
