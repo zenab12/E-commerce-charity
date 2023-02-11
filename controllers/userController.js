@@ -3,7 +3,8 @@ const User = require("./../models/userModel");
 const ApiError = require("../utils/ApiError");
 const { v4: uuid4 } = require("uuid");
 const multer = require("multer");
-const sharp = require("sharp/lib/sharp");
+const bcrypt = require("bcryptjs");
+
 // import sharp from "sharp";
 // const storageMulter = multer.diskStorage({
 //   destination: function (req, file, cb) {
@@ -16,48 +17,30 @@ const sharp = require("sharp/lib/sharp");
 //   },
 // });
 
-//memory storage for files
-const storageMulter = multer.memoryStorage();
-const multerFilter = (req, file, cb) => {
-  if (file.mimetype.startsWith("image")) {
-    cb(null, true);
-  } else {
-    cb(new ApiError("not an image,only image allowed", 400), false);
-  }
-};
+const sharp = require("sharp");
+const { uploadSingleImg } = require("../middlewares/uploadImage");
 
-const resizeUserImg = (req, res, next) => {
+//upload image
+const uploadUserImg = uploadSingleImg("profileImg");
+//image processing
+const resizeUserImg = expressAsyncHandler(async (req, res, next) => {
   const filename = `user-${uuid4()}-${Date.now()}.jpeg`;
-  sharp(req.file.buffer)
-    .resize(600, 600)
-    .toForamt("jpeg")
+  await sharp(req.file.buffer)
+    .resize(300, 300)
     .jpeg({ quality: 90 })
-    .toFile(`uploads/users/${filename}`)
-    .then((data) => console.log(data))
-    .catch((err) => console.log(err));
-  console.log(req.file);
+    .toFile(`uploads/users/${filename}`);
+  //save image in db
+  req.body.profileImg = filename;
   next();
-};
-const upload = multer({ storage: storageMulter, fileFilter: multerFilter });
+});
 
-const uploadUserImg = upload.single("profileImg");
 //@desc create user
 //@route POST /users
 //@access public
 const createUser = expressAsyncHandler(async (req, res, next) => {
-  const name = req.body.name;
-  const email = req.body.email;
-  const password = req.body.password;
-  const gender = req.body.gender;
-  const phone = req.body.phone;
-  const address = req.body.address;
+
   const user = await User.create({
-    name,
-    email,
-    password,
-    gender,
-    phone,
-    address,
+    ...req.body,
   });
 
   res.status(201).json({
@@ -130,15 +113,21 @@ const getUser = expressAsyncHandler(async (req, res, next) => {
 //@access admin,public
 const updateUser = expressAsyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  const name = req.body.name;
-  const password = req.body.password;
-  const phone = req.body.phone;
-  const address = req.body.address;
-  const user = await User.findOneAndUpdate(
-    { _id: id },
-    { name, phone, password, address },
-    { new: true }
-  );
+
+  let user;
+  // if(id == req.user.id){
+    // console.log(req.user.id)
+    // console.log(id)
+
+    const password = await bcrypt.hash( req.body.password, 10);
+    const { name, profileImg, email, address, phone } = req.body;
+    user = await User.findOneAndUpdate(
+      { _id: id },
+      { name, password, phone, email, address, profileImg },
+      { new: true }
+    );
+  // }
+
   if (!user) {
     return next(new ApiError(`User not found`, 404));
   } else {

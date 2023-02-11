@@ -1,4 +1,7 @@
 const mongoose = require("mongoose");
+const crypto = require('crypto');
+const jwt = require("jsonwebtoken");
+
 
 const userSchema = new mongoose.Schema(
   {
@@ -48,6 +51,8 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "default.jpg",
     },
+    active: { type: Boolean, default: true },
+
     //we will make seperated image model
     cart: {
       type: Array,
@@ -71,12 +76,52 @@ const userSchema = new mongoose.Schema(
     },
 
     //   passwordChangedAt: {},
-    //   passwordResetToken: {},
-    //   passwordResetExpires: {},
-    //   active: {},
+    passwordResetToken: String,
+    passwordResetExpires: Date,
   },
   { timestamps: true }
 );
 
+const setImgUrl = (doc) => {
+  //return iage base url + image name
+  if (doc.profileImg) {
+    const imgUrl = `${process.env.BASE_URL}/users/${doc.profileImg}`;
+    doc.profileImg = imgUrl;
+  }
+};
+
+userSchema.post("init", (doc) => {
+  //return iage base url + image name
+  setImgUrl(doc);
+});
+
+userSchema.post("save", (doc) => {
+  setImgUrl(doc);
+});
+
+
+// generate and hash password token
+userSchema.methods.getResetPasswordToken = function () {
+  const resetToken = crypto.randomBytes(20).toString('hex');
+
+  // Hash token and set to 
+  this.passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+
+  // Set expire 
+  this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
+  
+  return resetToken;
+}
+
+
+//sign JWT and return 
+userSchema.methods.getSignedJwtToken = function(){
+  return jwt.sign({ id: this._id }, process.env.JWT_SECRET,{
+    expiresIn: process.env.JWT_EXPIRE
+  });
+};
+
+
 const User = mongoose.model("User", userSchema);
 module.exports = User;
+
