@@ -3,6 +3,7 @@ const userController = require("./../controllers/userController");
 const authController = require("./../controllers/auth");
 const router = express.Router();
 const userValidator = require("../utils/validators/userValidator");
+const authValidator = require("../utils/validators/authValidator");
 
 const { protect, authorize } = require('./../middlewares/auth');
 // router.get("/", userController.getUsers);
@@ -16,23 +17,24 @@ router
     userController.uploadUserImg,
     userController.resizeUserImg,
     (req, res, next) => {
-      console.log(req.file);
-      console.log(req.body);
+      // console.log("this req.file from create route"+req.file);
+      console.log("this req.body from create route", req.body);
       next();
     },
-      userValidator.createUserValidator,hash,
+      // userValidator.createUserValidator,
+      hash,
 /*protect, authorize("admin"),*/userController.createUser,
   );
 router
   .route("/:id")
   .get(userValidator.getUserValidator, protect, authorize("admin"), userController.getUser)
-  .put(
+  .patch(
     userController.uploadUserImg,
     userController.resizeUserImg,
-    userValidator.updateUserValidator, hash, protect,
+    userValidator.updateUserValidator, hash, //protect,
     userController.updateUser
   )
-  .delete(userValidator.deleteUserValidator, protect, authorize("admin"), userController.deleteUser);
+  .delete(userValidator.deleteUserValidator,/* protect, authorize("admin"),*/ userController.deleteUser);
 
   // router.post('/login',authController.login)
   // router.post('/register',authController.register)
