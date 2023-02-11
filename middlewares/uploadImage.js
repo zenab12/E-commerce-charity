@@ -5,17 +5,17 @@ const { v4: uuid4 } = require("uuid");
 const multer = require("multer");
 const sharp = require("sharp");
 
-// const storageMulter = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, "uploads/users");
-//   },
-//   filename: function (req, file, cb) {
-//     const extension = file.mimetype.split("/")[1];
-//     const filename = `user-${uuid4()}-${Date.now()}.${extension}`;
-//     cb(null, filename);
-//   },
-// });
-const uploadSingleImg = (fieldName) => {
+const multerOptions = () => {
+  // const storageMulter = multer.diskStorage({
+  //   destination: function (req, file, cb) {
+  //     cb(null, "uploads/users");
+  //   },
+  //   filename: function (req, file, cb) {
+  //     const extension = file.mimetype.split("/")[1];
+  //     const filename = `user-${uuid4()}-${Date.now()}.${extension}`;
+  //     cb(null, filename);
+  //   },
+  // });
   const storageMulter = multer.memoryStorage();
 
   const multerFilter = (req, file, cb) => {
@@ -27,8 +27,15 @@ const uploadSingleImg = (fieldName) => {
   };
 
   const upload = multer({ storage: storageMulter, fileFilter: multerFilter });
-
-  return upload.single(fieldName);
+  return upload;
 };
 
-module.exports = uploadSingleImg;
+const uploadSingleImg = (fieldName) => {
+  return multerOptions().single(fieldName);
+};
+
+const uploadMixofImages = (arrayOfFields) => {
+  return multerOptions().fields(arrayOfFields);
+};
+
+module.exports = { uploadSingleImg, uploadMixofImages };
