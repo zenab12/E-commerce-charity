@@ -3,24 +3,13 @@ const { default: slugify } = require("slugify");
 const validatorMiddleware = require("../../middlewares/validator");
 const User = require("../../models/userModel");
 
+const ApiError = require("../ApiError");
+
 const getUserValidator = [
   check("id").isMongoId().withMessage("invalid user id"),
   validatorMiddleware,
 ];
 
-const loginValidator = [
-  check("email")
-    .notEmpty()
-    .withMessage("email is required")
-    .isEmail()
-    .withMessage("email address is invalid"),
-  check("password")
-    .notEmpty()
-    .withMessage("password is required")
-    .isLength({ min: 6 })
-    .withMessage("min length for password is 6 "),
-  validatorMiddleware,
-];
 
 const createUserValidator = [
   check("name")
@@ -42,7 +31,7 @@ const createUserValidator = [
     .custom(async (val, { req }) => {
       User.findOne({ email: val }).then((User) => {
         if (User) {
-          return Promise.reject("email already exists");
+          return Promise.reject(new ApiError("email already exists",401));
         } else {
           return true;
         }
@@ -130,5 +119,4 @@ module.exports = {
   createUserValidator,
   updateUserValidator,
   deleteUserValidator,
-  loginValidator,
 };

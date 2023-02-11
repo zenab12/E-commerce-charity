@@ -38,6 +38,7 @@ const resizeUserImg = expressAsyncHandler(async (req, res, next) => {
 //@route POST /users
 //@access public
 const createUser = expressAsyncHandler(async (req, res, next) => {
+
   const user = await User.create({
     ...req.body,
   });
@@ -112,13 +113,21 @@ const getUser = expressAsyncHandler(async (req, res, next) => {
 //@access admin,public
 const updateUser = expressAsyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  const password = await bcrypt.hash(req.body.password, 10);
-  const { name, profileImg, email, address, phone } = req.body;
-  const user = await User.findOneAndUpdate(
-    { _id: id },
-    { name, password, phone, email, address, profileImg },
-    { new: true }
-  );
+
+  let user;
+  // if(id == req.user.id){
+    // console.log(req.user.id)
+    // console.log(id)
+
+    const password = await bcrypt.hash( req.body.password, 10);
+    const { name, profileImg, email, address, phone } = req.body;
+    user = await User.findOneAndUpdate(
+      { _id: id },
+      { name, password, phone, email, address, profileImg },
+      { new: true }
+    );
+  // }
+
   if (!user) {
     return next(new ApiError(`User not found`, 404));
   } else {

@@ -24,9 +24,15 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+const categoryRoute=require('./routes/categoryRoute');
+const productRoute=require('./routes/productRoute');
+const brandtRoute=require('./routes/brandRoute');
+
 //routes
 app.use("/users", userRouter);
 app.use("/auth", authRouter);
+app.use("/products", productRoute)
+
 
 const categoryRoute = require("./routes/categoryRoute");
 const productRoute = require("./routes/productRoute");
@@ -35,6 +41,7 @@ const brandtRoute = require("./routes/brandRoute");
 app.use("/category", categoryRoute);
 app.use("/products", productRoute);
 app.use("/brands", brandtRoute);
+
 
 //route is not exist
 app.all("*", (req, res, next) => {
@@ -55,7 +62,7 @@ const server = app.listen(port, () =>
   console.log(`Server is running on http://localhost:${port}`)
 );
 
-//handle errors outside express
+// handle errors outside express
 process.on("unhandledRejection", (err) => {
   console.log("UNHANDLED REJECTION!", err.name, err.message);
   server.close(() => {
