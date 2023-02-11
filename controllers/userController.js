@@ -3,7 +3,7 @@ const User = require("./../models/userModel");
 const ApiError = require("../utils/ApiError");
 const { v4: uuid4 } = require("uuid");
 const multer = require("multer");
-const bcrypt = require('bcryptjs');
+const bcrypt = require("bcryptjs");
 
 // import sharp from "sharp";
 // const storageMulter = multer.diskStorage({
@@ -18,8 +18,7 @@ const bcrypt = require('bcryptjs');
 // });
 
 const sharp = require("sharp");
-const uploadSingleImg = require("../middlewares/uploadImage");
-
+const { uploadSingleImg } = require("../middlewares/uploadImage");
 
 //upload image
 const uploadUserImg = uploadSingleImg("profileImg");
@@ -39,7 +38,7 @@ const resizeUserImg = expressAsyncHandler(async (req, res, next) => {
 //@route POST /users
 //@access public
 const createUser = expressAsyncHandler(async (req, res, next) => {
-  console.log(req.body);
+
   const user = await User.create({
     ...req.body,
   });
@@ -114,8 +113,7 @@ const getUser = expressAsyncHandler(async (req, res, next) => {
 //@access admin,public
 const updateUser = expressAsyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  console.log(id)
-  console.log(req.user.id)
+
   let user;
   // if(id == req.user.id){
     // console.log(req.user.id)
@@ -129,6 +127,7 @@ const updateUser = expressAsyncHandler(async (req, res, next) => {
       { new: true }
     );
   // }
+
   if (!user) {
     return next(new ApiError(`User not found`, 404));
   } else {
