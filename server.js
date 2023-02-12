@@ -34,10 +34,6 @@ app.use("/auth", authRouter);
 app.use("/products", productRoute)
 
 
-const categoryRoute = require("./routes/categoryRoute");
-const productRoute = require("./routes/productRoute");
-const brandtRoute = require("./routes/brandRoute");
-
 app.use("/category", categoryRoute);
 app.use("/products", productRoute);
 app.use("/brands", brandtRoute);
