@@ -12,6 +12,7 @@ const globalErr = require("./middlewares/error");
 const { Server } = require("http");
 const { dirname } = require("path");
 require("dotenv/config");
+require("dotenv").config({ path: `${__dirname}/config.env` });
 dotenv.config({ path: "./config.env" });
 const port = process.env.PORT;
 
@@ -24,19 +25,22 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-const categoryRoute=require('./routes/categoryRoute');
-const productRoute=require('./routes/productRoute');
-const brandtRoute=require('./routes/brandRoute');
+// const categoryRoute=require('./routes/categoryRoute');
+// const productRoute=require('./routes/productRoute');
+// const brandtRoute=require('./routes/brandRoute');
 const cartRoute = require('./routes/cartRoute')
+const categoryRoute = require("./routes/categoryRoute");
+const productRoute = require("./routes/productRoute");
+const brandtRoute = require("./routes/brandRoute");
 
 //routes
 app.use("/users", userRouter);
 app.use("/auth", authRouter);
-app.use("/products", productRoute)
+app.use("/products", productRoute);
+
 app.use("/category", categoryRoute);
 app.use("/brands", brandtRoute);
 app.use("/cart", cartRoute);
-
 
 //route is not exist
 app.all("*", (req, res, next) => {

@@ -22,6 +22,7 @@ exports.createBrandValidator=[
         req.body.slug=slugify(value);
         return true;
     }),
+    check('image').optional(),
     ValidatorMiddleware,
 ];
 
