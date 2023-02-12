@@ -17,5 +17,7 @@ const brandSchema= new mongoose.Schema({
 ,{timestamps:true}
 );
 
-module.exports=mongoose.model('Brand',brandSchema);
+const BrandModel=mongoose.model('Brand',brandSchema);
+
+module.exports=BrandModel;
 

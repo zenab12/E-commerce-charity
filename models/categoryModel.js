@@ -5,7 +5,7 @@ const categorySchema = new mongoose.Schema(
     name: {
       type: String,
       require: [true, "category is required"],
-      unique: [true, "Brand must be unique"],
+      unique: [true, "category must be unique"],
       minlength: [3, "category title should be more than 3 characters "],
       maxlength: [30, "category title should be more than 30 characters "],
     },
@@ -35,6 +35,6 @@ categorySchema.post("save", (doc) => {
   setImgUrl(doc);
 });
 
-const categoryModel = mongoose.model("Category", categorySchema);
+const CategoryModel = mongoose.model("Category", categorySchema);
 
-module.exports = categoryModel;
+module.exports = CategoryModel;

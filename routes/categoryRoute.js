@@ -10,18 +10,20 @@ const {getCategories,
        getCaterogy,
        createCategory,
        updateCategory,
-       deteleCategory}
+       deteleCategory,
+      uploadUserImg,
+      resizeUserImg}
        =require('../controllers/categoryService');
 
 const router = express.Router();
 
 router.route('/')
       .get(getCategories)
-      .post(createCategoryValidator,createCategory);
+      .post(uploadUserImg,resizeUserImg,createCategoryValidator,createCategory);
 
 router.route('/:id')
       .get(getCaterogyValidator,getCaterogy)
-      .put(updateCategoryValidator,updateCategory)
+      .put(updateCategoryValidator,uploadUserImg,resizeUserImg,updateCategory)
       .delete(deteleCategoryValidator,deteleCategory);
 
 

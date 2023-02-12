@@ -6,7 +6,7 @@ const ApiError = require('../utils/ApiError');
 const ApiFeature = require('../utils/apiFeatures');
 
 
-
+ 
 
 exports.deleteOne = (Model) => 
     asyncHandler(async (req, res) => {
@@ -22,15 +22,15 @@ exports.deleteOne = (Model) =>
     
 
 exports.updateOne = (Model) => 
-    asyncHandler(async (req, res) => {
-        const document = await Model.findByOneAndUpdate(
+    asyncHandler(async (req, res,next) => {
+        const document = await Model.findByIdAndUpdate(
             req.params.id,
             req.body,
             { new: true }
         );
-
         if (!document) {
-            res.status(404).json({ msg: `No document For the is id : ${id} ` })
+            // res.status(404).json({ msg: `No document For the is id : ${id} ` })
+            return next(new ApiError(`No document For the is id :${req.params.id}`,404));
         }
         res.status(200).json({ data: document });
     });
@@ -38,8 +38,8 @@ exports.updateOne = (Model) =>
 
 exports.createOne = (Model) => 
     asyncHandler(async (req, res) => {
-        const document = await Model.create(req.body);
-        res.status(201).json({ data: document });
+        const newDoc = await Model.create(req.body);
+        res.status(201).json({ data: newDoc });
 });
 
 
@@ -62,7 +62,7 @@ asyncHandler (async(req, res, next) => {
     //2)pagenation
 
 //3)build query
-   const apiFeatures=new  ApiFeatures(Model.find(),req.query)
+   const apiFeatures=new  ApiFeature(Model.find(),req.query)
       .filter()
       .sort()
       .search()
