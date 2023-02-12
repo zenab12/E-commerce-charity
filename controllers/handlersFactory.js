@@ -1,6 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const ApiError = require('../utils/ApiError');
-const ApiFeature = require('../utils/apiFeature');
+// const ApiFeature = require('../utils/apiFeature');
 
 
 
@@ -17,7 +17,7 @@ exports.deleteOne = (Model) =>
     });
     
 
-exports.UpdateOne = (Model) => 
+exports.updateOne = (Model) => 
     asyncHandler(async (req, res) => {
         const document = await Model.findByOneAndUpdate(
             req.params.id,

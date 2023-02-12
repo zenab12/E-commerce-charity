@@ -63,8 +63,7 @@ exports.reziseMixofImages = expressAsyncHandler(async (req, res, next) => {
   }
 });
 
-const ApiError = require('../utils/ApiError');
-const ApiFeature = require('../utils/apiFeature');
+
 
 
 const factory=require('./handlersFactory');
@@ -88,5 +87,7 @@ exports.updateProduct=factory.updateOne(productModel);
 
 //Delete Product
 exports.deteleProduct= factory.deleteOne(productModel);
+
+
 
 

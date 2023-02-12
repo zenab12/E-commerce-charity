@@ -32,14 +32,7 @@ const brandtRoute=require('./routes/brandRoute');
 app.use("/users", userRouter);
 app.use("/auth", authRouter);
 app.use("/products", productRoute)
-
-
-const categoryRoute = require("./routes/categoryRoute");
-const productRoute = require("./routes/productRoute");
-const brandtRoute = require("./routes/brandRoute");
-
 app.use("/category", categoryRoute);
-app.use("/products", productRoute);
 app.use("/brands", brandtRoute);
 
 
@@ -62,7 +55,7 @@ const server = app.listen(port, () =>
   console.log(`Server is running on http://localhost:${port}`)
 );
 
-// handle errors outside express
+//// handle errors outside express
 process.on("unhandledRejection", (err) => {
   console.log("UNHANDLED REJECTION!", err.name, err.message);
   server.close(() => {

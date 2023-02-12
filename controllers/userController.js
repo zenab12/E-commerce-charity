@@ -94,8 +94,11 @@ const getUsers = expressAsyncHandler(async (req, res) => {
 //@access admin
 const getUser = expressAsyncHandler(async (req, res, next) => {
   const { id } = req.params;
+  if(id === req.user.id || req.user.role === 'admin'){
+  console.log (id, req.user.id ,req.user.role);
 
-  const user = await User.findById(id);
+    const user = await User.findById(id);
+
   if (!user) {
     return next(new ApiError(`User not found`, 404));
   } else {
@@ -106,6 +109,7 @@ const getUser = expressAsyncHandler(async (req, res, next) => {
       },
     });
   }
+}
 });
 
 //@desc update user
@@ -115,23 +119,28 @@ const updateUser = expressAsyncHandler(async (req, res, next) => {
   const { id } = req.params;
 
   let user;
-  // if(id == req.user.id){
-    // console.log(req.user.id)
-    // console.log(id)
+  console.log(req.user.id);
+  console.log(req.params);
+  console.log(id);
+  if(id === req.user.id || req.user.role === "admin"){
+    console.log('this is req.user: ', req.user.id , req.user.role)
+    console.log(id)
 
-    const password = await bcrypt.hash( req.body.password, 10);
-    const { name, profileImg, email, address, phone } = req.body;
+    const { name, profileImg, email, address, phone,  password } = req.body;
     user = await User.findOneAndUpdate(
       { _id: id },
       { name, password, phone, email, address, profileImg },
       { new: true }
     );
-  // }
+  }else{
+    return next(new ApiError("invalid id",401))
+  }
+
 
   if (!user) {
     return next(new ApiError(`User not found`, 404));
   } else {
-    res.status(200).json({
+    return res.status(200).json({
       status: "success",
       data: {
         user,

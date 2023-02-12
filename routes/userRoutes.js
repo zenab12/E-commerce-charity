@@ -5,14 +5,14 @@ const router = express.Router();
 const userValidator = require("../utils/validators/userValidator");
 const authValidator = require("../utils/validators/authValidator");
 
-const { protect, authorize } = require("./../middlewares/auth");
+const { protect, authorize } = require('./../middlewares/auth');
 // router.get("/", userController.getUsers);
 // //create user and test users db
 // router.post("/", userController.createUser);
-const { hash } = require("../middlewares/auth");
+const { hash } = require('../middlewares/auth')
 router
   .route("/")
-  .get(/*protect,*/ userController.getUsers)
+  .get(userController.getUsers)
   .post(
     userController.uploadUserImg,
     userController.resizeUserImg,
@@ -21,23 +21,23 @@ router
       console.log("this req.body from create route", req.body);
       next();
     },
-
       // userValidator.createUserValidator,
       hash,
 /*protect, authorize("admin"),*/userController.createUser,
   );
 router
   .route("/:id")
-  .get(userValidator.getUserValidator, protect, authorize("admin"), userController.getUser)
-  .put(
+  .get(userValidator.getUserValidator,protect, /* authorize("admin"),*/ userController.getUser)
+  .patch(
     userController.uploadUserImg,
     userController.resizeUserImg,
-    userValidator.updateUserValidator, hash, //protect,
+    userValidator.updateUserValidator, protect, hash,
     userController.updateUser
   )
   .delete(userValidator.deleteUserValidator,/* protect, authorize("admin"),*/ userController.deleteUser);
 
-// router.post('/login',authController.login)
-// router.post('/register',authController.register)
+  // router.post('/login',authController.login)
+  // router.post('/register',authController.register)
+
 
 module.exports = router;
