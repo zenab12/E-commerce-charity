@@ -32,6 +32,7 @@ const brandtRoute=require('./routes/brandRoute');
 app.use("/users", userRouter);
 app.use("/auth", authRouter);
 app.use("/products", productRoute)
+
 app.use("/category", categoryRoute);
 app.use("/brands", brandtRoute);
 
