@@ -1,3 +1,4 @@
+
 const asyncHandler = require('express-async-handler');
 const { listeners } = require('../models/productModel');
 const ApiError = require('../utils/ApiError');
@@ -77,4 +78,5 @@ asyncHandler (async(req, res, next) => {
 
 });
 
-    
+    res.status(200).json({ result: document.length, page, data: document });
+  });

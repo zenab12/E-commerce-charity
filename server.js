@@ -36,7 +36,6 @@ app.use("/products", productRoute)
 app.use("/category", categoryRoute);
 app.use("/brands", brandtRoute);
 
-
 //route is not exist
 app.all("*", (req, res, next) => {
   //create error
