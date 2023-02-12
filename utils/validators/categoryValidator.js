@@ -31,9 +31,9 @@ exports.updateCategoryValidator=[
     .withMessage('Invalid category ID Formate'),
     body('name')
     .custom((value, {req}) => {
-     req.body.slug=slugify(value);
-     return true;
- }),
+    req.body.slug=slugify(value);
+    return true;
+}),
     ValidatorMiddleware,
 ];
 

@@ -27,6 +27,7 @@ app.use(bodyParser.json());
 const categoryRoute=require('./routes/categoryRoute');
 const productRoute=require('./routes/productRoute');
 const brandtRoute=require('./routes/brandRoute');
+const cartRoute = require('./routes/cartRoute')
 
 //routes
 app.use("/users", userRouter);
@@ -34,6 +35,7 @@ app.use("/auth", authRouter);
 app.use("/products", productRoute)
 app.use("/category", categoryRoute);
 app.use("/brands", brandtRoute);
+app.use("/cart", cartRoute);
 
 
 //route is not exist

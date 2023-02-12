@@ -27,7 +27,7 @@ const setImgUrl = (doc) => {
 };
 
 categorySchema.post("init", (doc) => {
-  //return iage base url + image name
+  //return image base url + image name
   setImgUrl(doc);
 });
 
