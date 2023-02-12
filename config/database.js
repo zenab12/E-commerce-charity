@@ -6,7 +6,7 @@ dotenv.config({ path: "./config.env" });
 
 const dbConnection = () => {
   // connect on db on atlas
-  mongoose
+  // mongoose
     // .connect(process.env.db_url)
     // .then((con) =>
     //   console.log(`connected successfully ${con.connection.host}`)
@@ -19,3 +19,4 @@ const dbConnection = () => {
 };
 
 module.exports = dbConnection;
+

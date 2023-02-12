@@ -48,6 +48,7 @@ exports.login = expressAsyncHandler(async ( req, res, next)=>{
     // if ( !email || !password ) {
     //     return next(new ApiError('Please provide email and password',400))
 	// }
+    console.log(email, password);
     const user = await User.findOne({email});
     if ( !user || !await bcrypt.compare(password, user.password) ) {
         return next(new ApiError('invalid email or password',401))
@@ -60,7 +61,7 @@ exports.login = expressAsyncHandler(async ( req, res, next)=>{
     
     
 
-        sendTokenResponse(user, 200, res);
+    sendTokenResponse(user, 200, res);
 
 
 
@@ -74,7 +75,8 @@ exports.login = expressAsyncHandler(async ( req, res, next)=>{
     // //     options.secure = true;
     // // }
 
-    // res.status(200).cookie('token',token,options).send({
+    // // res.status(200).cookie('token',token,options).send({
+    // res.status(200).send({
     //     success: true, 
     //     message: "login successfully",
     //     token
@@ -112,7 +114,7 @@ exports.forgotPassword =  expressAsyncHandler(async (req, res, next) => {
     console.log("from auth controller resetToken : "+ resetToken);
 
     // create reset url
-    const resetUrl = `${req.protocol}://${req.get('host')}/resetpassword/${resetToken}`;
+    const resetUrl = `${req.protocol}://${req.get('host')}/auth/resetpassword/${resetToken}`;
     const message = `You recieve this email to reset password. Please make a put request to: \n\n${resetUrl}`;
 
     await user.save();
@@ -145,9 +147,9 @@ exports.forgotPassword =  expressAsyncHandler(async (req, res, next) => {
 //@access public
 
 exports.resetPassword =  expressAsyncHandler(async (req, res, next) => {
-    
     // get hashed token
-    const resetPasswordToken = crypto.createHash('sha256').update(req.params.resettoken).digest('hex');
+    const passwordResetToken = crypto.createHash('sha256').update(req.params.resettoken).digest('hex');
+    console.log(passwordResetToken);
 
     const user = await User.findOne({
         passwordResetToken,
