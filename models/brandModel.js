@@ -26,6 +26,8 @@ const setImgUrl = (doc) => {
   console.log(doc);
 };
 
+const BrandModel=mongoose.model('Brand',brandSchema);
+
 brandSchema.post("init", (doc) => {
   //return iage base url + image name
   setImgUrl(doc);
@@ -34,4 +36,4 @@ brandSchema.post("init", (doc) => {
 brandSchema.post("save", (doc) => {
   setImgUrl(doc);
 });
-module.exports = mongoose.model("Brand", brandSchema);
+module.exports=BrandModel;

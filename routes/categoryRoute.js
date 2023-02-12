@@ -1,3 +1,4 @@
+
 const express = require("express");
 
 const {
@@ -13,7 +14,6 @@ const {
   createCategory,
   updateCategory,
   deteleCategory,
-
   uploadImg,
   resizeImg,
 } = require("../controllers/categoryService");

@@ -9,7 +9,6 @@ exports.deleteOne = (Model) =>
     const { id } = req.params;
 
     const document = await Model.findByIdAndDelete(id);
-
     if (!document) {
       res.status(404).json({ msg: `No document For the is id : ${id} ` });
     }
@@ -49,6 +48,7 @@ exports.getAll = (Model) =>
     //1)Filtering
 
     //2)pagenation
+
 
     //3)build query
     const apiFeatures = new ApiFeature(Model.find(), req.query)
