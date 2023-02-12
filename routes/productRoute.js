@@ -36,7 +36,7 @@ router
 
 router
   .route("/:id")
-  .get(getProductValidator, reziseMixofImages, getProduct)
+  .get(getProductValidator, getProduct)
   .put(uploadofImages, updateProductValidator, updateProduct)
   .delete(deteleProductValidator, deteleProduct);
 

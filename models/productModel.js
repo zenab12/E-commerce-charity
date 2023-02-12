@@ -45,15 +45,15 @@ const productSchema = new mongoose.Schema(
     },
     images: [String], // inner photos
     // category
-    // category:{
-    //     type: Schema.Types.ObjectId, //mongoose.Schema.objectId,
-    //     ref:'Category',
-    //     require:[true,'Product must belong to category']
-    // },
-    // brand:{
-    //     type: Schema.Types.ObjectId, //mongoose.Schema.objectId,
-    //     ref:'Brand'
-    // },
+    category: {
+      type: Schema.Types.ObjectId, //mongoose.Schema.objectId,
+      ref: "Category",
+      require: [true, "Product must belong to category"],
+    },
+    brand: {
+      type: Schema.Types.ObjectId, //mongoose.Schema.objectId,
+      ref: "Brand",
+    },
     ratingAverage: {
       type: Number,
       min: [0, "Rating must be above or equal 1"],
