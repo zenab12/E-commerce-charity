@@ -82,12 +82,14 @@ const updateUserValidator = [
     .custom(async (val, { req }) => {
       User.findOne({ email: val }).then((User) => {
         if (User) {
-          return Promise.reject("email already exists");
+          // return Promise.reject("email already exists");
+          return ("email already exists");
         } else {
           return true;
         }
       });
     }),
+    
   check("phone")
     .optional()
     .isMobilePhone([
@@ -107,7 +109,8 @@ const updateUserValidator = [
     .isLength({ min: 6 })
     .withMessage("min length for password is 6 ")
     .optional(),
-  check("profileImg").optional(),
+  check("profileImg")
+  .optional(),
   validatorMiddleware,
 ];
 const deleteUserValidator = [
