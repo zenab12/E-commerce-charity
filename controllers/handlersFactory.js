@@ -77,3 +77,4 @@ asyncHandler (async(req, res, next) => {
     res.status(200).json({result:document.length,pagenationResult,data:document});
 
 });
+
