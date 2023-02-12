@@ -8,8 +8,12 @@ const { v4: uuid4 } = require("uuid");
 const multer = require("multer");
 const sharp = require("sharp");
 const { uploadMixofImages } = require("../middlewares/uploadImage");
+const ApiFeature = require('../utils/apiFeatures');
+
 
 const storageMulter = multer.memoryStorage();
+
+const factory=require('./handlersFactory');
 
 const multerFilter = (req, file, cb) => {
   if (file.mimetype.startsWith("image")) {
@@ -63,10 +67,6 @@ exports.reziseMixofImages = expressAsyncHandler(async (req, res, next) => {
   }
 });
 
-const ApiError = require("../utils/ApiError");
-const ApiFeature = require("../utils/apiFeature");
-
-const factory = require("./handlersFactory");
 
 //All products
 
@@ -82,4 +82,4 @@ exports.createProduct = factory.createOne(productModel);
 exports.updateProduct = factory.updateOne(productModel);
 
 //Delete Product
-exports.deteleProduct = factory.deleteOne(productModel);
+exports.deteleProduct= factory.deleteOne(productModel);

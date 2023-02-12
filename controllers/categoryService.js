@@ -8,7 +8,12 @@ const { v4: uuid4 } = require("uuid");
 const ApiError = require("../utils/ApiError");
 // const ApiFeature = require("../utils/apiFeatures");
 
-const factory = require("./handlersFactory");
+const ApiError = require('../utils/ApiError');
+
+const ApiFeature = require('../utils/apiFeatures');
+
+const factory=require('./handlersFactory');
+
 
 //All Categories
 exports.getCategories = factory.getAll(CategoryModel);

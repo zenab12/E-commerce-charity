@@ -13,6 +13,7 @@ exports.protect = expressAsyncHandler(async(req, res, next)=>{
     //     console.log(token)
     // }
     
+    console.log("token: ",token);
     // make sure token exist
     if(!token){
         return next(new ApiError("Not authorized access",401))
