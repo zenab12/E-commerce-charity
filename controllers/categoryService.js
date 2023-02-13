@@ -2,8 +2,15 @@ const CategoryModel = require("../models/categoryModel");
 const expressAsyncHandler = require("express-async-handler");
 const sharp = require("sharp");
 const { v4: uuid4 } = require("uuid");
-const factory=require('./handlersFactory');
 
+
+
+const ApiError = require("../utils/ApiError");
+
+const ApiFeature = require("../utils/apiFeatures");
+
+
+const factory = require("./handlersFactory");
 
 //All Categories
 exports.getCategories = factory.getAll(CategoryModel);
@@ -23,15 +30,15 @@ exports.deteleCategory = factory.deleteOne(CategoryModel);
 const { uploadSingleImg } = require("../middlewares/uploadImage");
 
 //upload image
-exports.uploadUserImg = uploadSingleImg("image");
+exports.uploadImg = uploadSingleImg("image");
 //image processing
-exports.resizeUserImg = expressAsyncHandler(async (req, res, next) => {
-  const filename = `user-${uuid4()}-${Date.now()}.jpeg`;
+exports.resizeImg = expressAsyncHandler(async (req, res, next) => {
+  const filename = `category-${uuid4()}-${Date.now()}.jpeg`;
   await sharp(req.file.buffer)
     .resize(300, 300)
     .jpeg({ quality: 90 })
-    .toFile(`uploads/users/${filename}`);
+    .toFile(`uploads/categories/${filename}`);
   //save image in db
-  req.body.profileImg = filename;
+  req.body.image = filename;
   next();
 });

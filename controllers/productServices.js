@@ -1,12 +1,19 @@
 const productModel = require("../models/productModel");
 const expressAsyncHandler = require("express-async-handler");
 const User = require("./../models/productModel");
+const ApiError = require("../utils/ApiError");
 const { v4: uuid4 } = require("uuid");
 const multer = require("multer");
 const sharp = require("sharp");
 const { uploadMixofImages } = require("../middlewares/uploadImage");
+
+
+const ApiFeature = require("../utils/apiFeatures");
+
 const storageMulter = multer.memoryStorage();
-const factory=require('./handlersFactory');
+
+const factory = require("./handlersFactory");
+
 
 
 const multerFilter = (req, file, cb) => {
@@ -61,7 +68,6 @@ exports.reziseMixofImages = expressAsyncHandler(async (req, res, next) => {
   }
 });
 
-
 //All products
 
 exports.getproducts = factory.getAll(productModel,'productModel');
@@ -76,4 +82,4 @@ exports.createProduct = factory.createOne(productModel);
 exports.updateProduct = factory.updateOne(productModel);
 
 //Delete Product
-exports.deteleProduct= factory.deleteOne(productModel);
+exports.deteleProduct = factory.deleteOne(productModel);
