@@ -37,13 +37,17 @@ class ApiFeatures{
             return this;
     }
 
-    search(){
+    search(modelName){
         if(this.queryString.keyword){
-            const query={};
-            query.$or=[                           //node =NODE
+            let query={};
+            if(modelName==='productModel'){
+                query.$or=[                           //node =NODE
                 {title:{$regex:this.queryString.keyword, $options:'i'}},
                 {description:{$regex:this.queryString.keyword, $options:'i'}},
-            ];
+            ]; 
+            }else{
+                query={name:{$regex:this.queryString.keyword, $options:'i'}}
+            }
             this.mongooseQuery=this.mongooseQuery.find(query);
         }
         return this;
@@ -58,7 +62,7 @@ class ApiFeatures{
         const pagenation ={};
         pagenation.currentPage=page;
         pagenation.limit=limit;
-        pagenation.numberOfPages=countDocs/limit;
+        pagenation.numberOfPages=Math.ceil(countDocs/limit);
         
         //next page
         if(endIndex < countDocs){

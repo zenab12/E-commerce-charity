@@ -54,27 +54,21 @@ exports.getOne = (Model) =>
     });
 
 
-exports.getAll = (Model) => 
+exports.getAll = (Model,modelName='') => 
 asyncHandler (async(req, res, next) => {
-    //1)Filtering 
-
-
-    //2)pagenation
-
-//3)build query
+//build query
+   const countDocs=await Model.countDocuments();
    const apiFeatures=new  ApiFeature(Model.find(),req.query)
       .filter()
       .sort()
-      .search()
-      .pagenation()
+      .search(modelName)
+      .pagenation(countDocs)
       .limitFields()
 
-    
     //execute query
     const {mongooseQuery,pagenationResult}=apiFeatures;
-    const document= await apiFeatures.mongooseQuery;
+    const document= await mongooseQuery;
     
     res.status(200).json({result:document.length,pagenationResult,data:document});
-
 });
 

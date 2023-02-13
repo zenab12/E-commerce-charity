@@ -1,17 +1,7 @@
-const { default: slugify } = require("slugify");
-const asyncHandler = require("express-async-handler");
 const CategoryModel = require("../models/categoryModel");
 const expressAsyncHandler = require("express-async-handler");
 const sharp = require("sharp");
 const { v4: uuid4 } = require("uuid");
-
-const ApiError = require("../utils/ApiError");
-// const ApiFeature = require("../utils/apiFeatures");
-
-const ApiError = require('../utils/ApiError');
-
-const ApiFeature = require('../utils/apiFeatures');
-
 const factory=require('./handlersFactory');
 
 
@@ -25,7 +15,7 @@ exports.getCaterogy = factory.getOne(CategoryModel);
 exports.createCategory = factory.createOne(CategoryModel);
 
 // Update Category
-exports.updateCategory = factory.UpdateOne(CategoryModel);
+exports.updateCategory = factory.updateOne(CategoryModel);
 
 //Delete Category
 exports.deteleCategory = factory.deleteOne(CategoryModel);
