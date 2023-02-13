@@ -1,10 +1,11 @@
-const { default: slugify } = require("slugify");
-const asyncHandler = require("express-async-handler");
+
 const BrandModel = require("../models/brandModel");
 const expressAsyncHandler = require("express-async-handler");
 const sharp = require("sharp");
 const { uploadSingleImg } = require("../middlewares/uploadImage");
 const { v4: uuid4 } = require("uuid");
+const factory=require('./handlersFactory');
+
 
 //upload image
 exports.uploadBrandImg = uploadSingleImg("image");
@@ -23,7 +24,9 @@ exports.resizeBrandImg = expressAsyncHandler(async (req, res, next) => {
 const ApiError = require("../utils/ApiError");
 const ApiFeature = require("../utils/apiFeatures");
 
+
 const factory = require("./handlersFactory");
+
 
 //All Brands
 
