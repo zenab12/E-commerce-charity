@@ -1,13 +1,14 @@
-const { default: slugify } = require("slugify");
-const asyncHandler = require("express-async-handler");
 const CategoryModel = require("../models/categoryModel");
 const expressAsyncHandler = require("express-async-handler");
 const sharp = require("sharp");
 const { v4: uuid4 } = require("uuid");
 
+
+
 const ApiError = require("../utils/ApiError");
 
 const ApiFeature = require("../utils/apiFeatures");
+
 
 const factory = require("./handlersFactory");
 

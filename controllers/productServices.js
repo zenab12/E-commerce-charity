@@ -1,5 +1,3 @@
-const { default: slugify } = require("slugify");
-const asyncHandler = require("express-async-handler");
 const productModel = require("../models/productModel");
 const expressAsyncHandler = require("express-async-handler");
 const User = require("./../models/productModel");
@@ -8,6 +6,8 @@ const { v4: uuid4 } = require("uuid");
 const multer = require("multer");
 const sharp = require("sharp");
 const { uploadMixofImages } = require("../middlewares/uploadImage");
+
+
 const ApiFeature = require("../utils/apiFeatures");
 
 const storageMulter = multer.memoryStorage();
@@ -16,6 +16,7 @@ const factory = require("./handlersFactory");
 
 
 const { protect , authorize } = require('../middlewares/auth')
+
 
 const multerFilter = (req, file, cb) => {
   if (file.mimetype.startsWith("image")) {
@@ -71,7 +72,7 @@ exports.reziseMixofImages = expressAsyncHandler(async (req, res, next) => {
 
 //All products
 
-exports.getproducts = factory.getAll(productModel);
+exports.getproducts = factory.getAll(productModel,'productModel');
 
 //product By ID
 exports.getProduct = factory.getOne(productModel);
