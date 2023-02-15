@@ -23,7 +23,7 @@ exports.signupValidator = [
         .custom((val) =>
             User.findOne({ email: val }).then((user) => {
                 if (user) {
-                    return Promise.reject(new ApiError('E-mail already in user',401));
+                    return Promise.reject(new ApiError('E-mail already exist', 401));
                 }
             })
         ),

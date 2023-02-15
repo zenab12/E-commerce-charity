@@ -28,7 +28,7 @@ router
   .route("/:id")
   .get(
     userValidator.getUserValidator,
-    protect,
+  protect,
     /* authorize("admin"),*/ userController.getUser
   )
   .patch(

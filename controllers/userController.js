@@ -95,9 +95,9 @@ const getUsers = expressAsyncHandler(async (req, res) => {
 const getUser = expressAsyncHandler(async (req, res, next) => {
   const { id } = req.params;
   if(id === req.user.id || req.user.role === 'admin'){
-  console.log (id, req.user.id ,req.user.role);
-
-    const user = await User.findById(id);
+  console.log ("req.user.id=",id, req.user ,req.user.role);
+    
+  const user = await User.findById(id);
 
   if (!user) {
     return next(new ApiError(`User not found`, 404));
@@ -109,6 +109,8 @@ const getUser = expressAsyncHandler(async (req, res, next) => {
       },
     });
   }
+}else{
+  return next(new ApiError(`User not found`, 404));
 }
 });
 
@@ -122,9 +124,9 @@ const updateUser = expressAsyncHandler(async (req, res, next) => {
   console.log(req.user.id);
   console.log(req.params);
   console.log(id);
-  if(id === req.user.id || req.user.role === "admin"){
-    console.log('this is req.user: ', req.user.id , req.user.role)
-    console.log(id)
+  // if(id === req.user.id || req.user.role === "admin"){
+  //   console.log('this is req.user: ', req.user.id , req.user.role)
+  //   console.log(id)
 
     const { name, profileImg, email, address, phone,  password } = req.body;
     user = await User.findOneAndUpdate(
@@ -132,9 +134,9 @@ const updateUser = expressAsyncHandler(async (req, res, next) => {
       { name, password, phone, email, address, profileImg },
       { new: true }
     );
-  }else{
-    return next(new ApiError("invalid id",401))
-  }
+  // }else{
+  //   return next(new ApiError("invalid id",401))
+  // }
 
 
   if (!user) {
