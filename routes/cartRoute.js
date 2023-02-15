@@ -10,7 +10,7 @@ router.use(protect,authorize('user'));
 router
     .route("/")
     .post(
-        // protect,
+        protect,git
         //authorize('user'),
         addProductToCart
     ).get(getLoggedUserCart)
