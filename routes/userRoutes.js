@@ -15,7 +15,6 @@ router
   .get(userController.getUsers)
   .post(
     userController.uploadUserImg,
-    userController.resizeUserImg,
     (req, res, next) => {
       // console.log("this req.file from create route"+req.file);
       console.log("this req.body from create route", req.body);
@@ -34,7 +33,6 @@ router
   )
   .patch(
     userController.uploadUserImg,
-
     userValidator.updateUserValidator,
     protect,
     hash,
