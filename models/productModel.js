@@ -64,7 +64,7 @@ const productSchema = new mongoose.Schema(
 );
 
 const setImgUrl = (doc) => {
-  //return iage base url + image name
+  //return image base url + image name
   if (doc.imageCover) {
     const imgUrl = `${process.env.BASE_URL}/products/${doc.imageCover}`;
     doc.imageCover = imgUrl;

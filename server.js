@@ -25,13 +25,10 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// const categoryRoute=require('./routes/categoryRoute');
-// const productRoute=require('./routes/productRoute');
-// const brandtRoute=require('./routes/brandRoute');
-const cartRoute = require('./routes/cartRoute')
 const categoryRoute = require("./routes/categoryRoute");
 const productRoute = require("./routes/productRoute");
 const brandtRoute = require("./routes/brandRoute");
+const cartRoute = require('./routes/cartRoute')
 
 //routes
 app.use("/users", userRouter);

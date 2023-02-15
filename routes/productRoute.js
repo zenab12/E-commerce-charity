@@ -1,5 +1,7 @@
 const express = require("express");
 
+const { protect, authorize } = require('../middlewares/auth');
+
 const {
   createProductValidator,
   getProductValidator,
@@ -31,6 +33,7 @@ router
       next();
     },
     createProductValidator,
+    protect,
     createProduct
   );
 

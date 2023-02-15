@@ -5,14 +5,14 @@ require("dotenv/config");
 dotenv.config({ path: "./config.env" });
 
 const dbConnection = () => {
-  // connect on db on atlas
-  mongoose
-    // .connect(process.env.db_url)
-    // .then((con) =>
-    //   console.log(`connected successfully ${con.connection.host}`)
-    // );
+  //// connect on db on atlas
+  // mongoose
+  //   .connect(process.env.db_url)
+  //   .then((con) =>
+  //     console.log(`connected successfully ${con.connection.host}`)
+  //   );
 
-  //connect on db locally
+  ////connect on db locally
   mongoose
     .connect("mongodb://127.0.0.1:27017/E-commerce")
     .then(() => console.log("connected to db successfully"));
