@@ -67,7 +67,7 @@ exports.addProductToCart = expressAsyncHandler(async (req, res, next) => {
 exports.getLoggedUserCart = expressAsyncHandler(async (req, res, next) => {
     const cart = await Cart.findOne({ user: req.user._id });
     if (!cart) {
-        return next(ApiError("There is no cart for this user", 404));
+        return next(new ApiError("There is no cart for this user", 404));
     }
     res.status(200).json({
         status: "success",
@@ -95,4 +95,39 @@ exports.removeSpecificCartItem = expressAsyncHandler(async(req, res, next)=>{
             numOfCartItems: cart.cartItems.length,
             data: cart
         });
+})
+
+
+//@desc clear logged user cart
+//@route Delete /cart
+//@access private/User
+exports.clearCart=expressAsyncHandler(async(req, res, next)=>{
+    await Cart.findOneAndDelete({user:req.user._id});
+    res.status(204).send();
+})
+
+
+//@desc Update specific cart item
+//@route Put /cart/:itemId
+//@access private/User
+exports.updateCartItemQuantity = expressAsyncHandler(async(req, res, next)=>{
+    const cart = await Cart.findOne({user: req.user._id});
+    if(!cart){
+        return next(new ApiError("There is no cart for this user", 404));
+    }
+    const productIndex = cart.cartItems.findIndex((item)=> req.params.itemId === item.product?.toString());
+    if(productIndex > -1){
+    const cartItem = cart.cartItems[productIndex];
+    cartItem.quantity = req.body.quantity;
+    cart.cartItems[productIndex] = cartItem;
+    }else{
+        return next(new ApiError(`There is no item for this id : ${req.params.itemId}`, 404));
+    }
+    calcTotalCartDonation(cart);
+    await cart.save();
+    res.status(200).json({
+        status: "success",
+        numOfCartItems: cart.cartItems.length,
+        data: cart
+    })
 })
