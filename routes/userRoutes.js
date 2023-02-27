@@ -6,13 +6,14 @@ const userValidator = require("../utils/validators/userValidator");
 const authValidator = require("../utils/validators/authValidator");
 
 const { protect, authorize } = require("./../middlewares/auth");
-// router.get("/", userController.getUsers);
-// //create user and test users db
-// router.post("/", userController.createUser);
+
 const { hash } = require("../middlewares/auth");
 router
   .route("/")
-  .get(userController.getUsers)
+  .get(
+    // protect,
+    // authorize("admin"),
+    userController.getUsers)
   .post(
     userController.uploadUserImg,
     (req, res, next) => {
@@ -28,8 +29,9 @@ router
   .route("/:id")
   .get(
     userValidator.getUserValidator,
-  protect,
-    /* authorize("admin"),*/ userController.getUser
+    // protect,
+    // authorize("admin"),
+    userController.getUser
   )
   .patch(
     userController.uploadUserImg,
