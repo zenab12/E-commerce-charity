@@ -11,7 +11,7 @@ router
     .route("/")
     .post(
         // protect,
-        //authorize('user'),
+        // authorize('user'),
         addProductToCart
     )
     .get(getLoggedUserCart)

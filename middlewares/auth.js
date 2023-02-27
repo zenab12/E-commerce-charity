@@ -22,34 +22,17 @@ exports.protect = expressAsyncHandler(async(req, res, next)=>{
         const {userId} = jwt.verify(token,process.env.JWT_SECRET);
         console.log(userId);
         req.user = await User.findById(userId);
-        // console.log("this is from protect middleware : " + req.user);
         console.log("this is from protect middleware : " , req.user._id);
         next();
     }catch (err){
         return next(new ApiError("Not authorized access",401))
 
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
 });
 
 
 // Grant access to specific roles
-exports.authorize = (...roles)=>{
+exports.authorize = (...roles)=>{                   /// in case we send more than one role spread them(...role)
     return (req, res, next)=>{
         if(!roles.includes(req.user.role)){
             return next(new ApiError(`user role ${req.user.role} is not authorized to access this route`,403));
