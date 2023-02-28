@@ -5,7 +5,7 @@ const {
   createBrandValidator,
   updateBrandValidator,
   deteleBrandValidator,
-} = require("../utils/validators/brandValidator"); //'../utils/validators/categoryValidator'
+} = require("../utils/validators/brandValidator");
 
 const {
   getBrands,
@@ -40,3 +40,4 @@ router
   .delete(deteleBrandValidator, deteleBrand);
 
 module.exports = router;
+
