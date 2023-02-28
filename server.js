@@ -3,6 +3,8 @@ const morgan = require("morgan");
 let bodyParser = require("body-parser");
 let fs = require("fs");
 let path = require("path");
+const cors = require("cors");
+const compression = require("compression");
 const app = express();
 const userRouter = require("./routes/userRoutes");
 const authRouter = require("./routes/auth");
@@ -28,7 +30,12 @@ app.use(bodyParser.json());
 const categoryRoute = require("./routes/categoryRoute");
 const productRoute = require("./routes/productRoute");
 const brandtRoute = require("./routes/brandRoute");
-const cartRoute = require('./routes/cartRoute')
+const cartRoute = require("./routes/cartRoute");
+
+//cors
+app.use(cors());
+app.options("*", cors());
+app.use(compression());
 
 //routes
 app.use("/users", userRouter);
