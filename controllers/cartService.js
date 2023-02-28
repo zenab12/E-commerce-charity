@@ -60,12 +60,55 @@ exports.addProductToCart = expressAsyncHandler(async (req, res, next) => {
     });
 });
 
+
+
+
+
+//////
+
+
+
+// exports.addProductToCart = expressAsyncHandler(async (req, res, next) => {
+//     const { productId } = req.body;
+//     const product = await Product.findById(productId);
+//     // Get cart for logged user
+//     let cart = await Cart.findOne({ user: req.user._id }); /////  req.user comes from protect middleware
+//     // console.log("cart",cart)
+//     // console.log("req.user._id",req.user._id)
+//     if (!cart) {
+//         //create cart for this user and add this product
+//         cart = await Cart.create({
+//             user: req.user._id,
+//             cartItems: [{ product: productId, price: product.price }],
+//         });
+//     } else {
+//         // product exist in cart , update quantity
+//         cart.cartItems.push({ product: productId, price: product.price });
+//     }
+
+//     // calc total cart donation
+//     calcTotalCartDonation(cart);
+
+//     await cart.save();
+
+//     res.status(200).json({
+//         status: "success",
+//         message: "product added to cart successfully",
+//         numOfCartItems: cart.cartItems.length,
+//         data: cart,
+//     });
+// });
+
+
+
+
 //@desc Get logged user cart
 //@route Get /cart
 //@access private/User
 
 exports.getLoggedUserCart = expressAsyncHandler(async (req, res, next) => {
     const cart = await Cart.findOne({ user: req.user._id });
+    // const cart = await Cart.findOne({ user: "63e825de00fee4c3efd3b93c" });
     if (!cart) {
         return next(new ApiError("There is no cart for this user", 404));
     }
@@ -81,28 +124,28 @@ exports.getLoggedUserCart = expressAsyncHandler(async (req, res, next) => {
 //@route Get /cart/:itemId
 //@access private/User
 
-exports.removeSpecificCartItem = expressAsyncHandler(async(req, res, next)=>{
-    const cart = await Cart.findOneAndUpdate({user: req.user._id},
+exports.removeSpecificCartItem = expressAsyncHandler(async (req, res, next) => {
+    const cart = await Cart.findOneAndUpdate({ user: req.user._id },
         {
-            $pull: { cartItems: { _id : req.params.itemId } }
+            $pull: { cartItems: { _id: req.params.itemId } }
         },
         { new: true }
-        );
-        calcTotalCartDonation(cart);
-        cart.save();
-        res.status(200).json({
-            status: "success",
-            numOfCartItems: cart.cartItems.length,
-            data: cart
-        });
+    );
+    calcTotalCartDonation(cart);
+    cart.save();
+    res.status(200).json({
+        status: "success",
+        numOfCartItems: cart.cartItems.length,
+        data: cart
+    });
 })
 
 
 //@desc clear logged user cart
 //@route Delete /cart
 //@access private/User
-exports.clearCart=expressAsyncHandler(async(req, res, next)=>{
-    await Cart.findOneAndDelete({user:req.user._id});
+exports.clearCart = expressAsyncHandler(async (req, res, next) => {
+    await Cart.findOneAndDelete({ user: req.user._id });
     res.status(204).send();
 })
 
@@ -110,17 +153,17 @@ exports.clearCart=expressAsyncHandler(async(req, res, next)=>{
 //@desc Update specific cart item
 //@route Put /cart/:itemId
 //@access private/User
-exports.updateCartItemQuantity = expressAsyncHandler(async(req, res, next)=>{
-    const cart = await Cart.findOne({user: req.user._id});
-    if(!cart){
+exports.updateCartItemQuantity = expressAsyncHandler(async (req, res, next) => {
+    const cart = await Cart.findOne({ user: req.user._id });
+    if (!cart) {
         return next(new ApiError("There is no cart for this user", 404));
     }
-    const productIndex = cart.cartItems.findIndex((item)=> req.params.itemId === item.product?.toString());
-    if(productIndex > -1){
-    const cartItem = cart.cartItems[productIndex];
-    cartItem.quantity = req.body.quantity;
-    cart.cartItems[productIndex] = cartItem;
-    }else{
+    const productIndex = cart.cartItems.findIndex((item) => req.params.itemId === item.product?.toString());
+    if (productIndex > -1) {
+        const cartItem = cart.cartItems[productIndex];
+        cartItem.quantity = req.body.quantity;
+        cart.cartItems[productIndex] = cartItem;
+    } else {
         return next(new ApiError(`There is no item for this id : ${req.params.itemId}`, 404));
     }
     calcTotalCartDonation(cart);

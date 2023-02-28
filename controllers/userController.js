@@ -5,6 +5,8 @@ const { v4: uuid4 } = require("uuid");
 const multer = require("multer");
 const bcrypt = require("bcryptjs");
 
+
+const { protect, authorize } = require('../middlewares/auth')
 // import sharp from "sharp";
 // const storageMulter = multer.diskStorage({
 //   destination: function (req, file, cb) {
@@ -94,24 +96,24 @@ const getUsers = expressAsyncHandler(async (req, res) => {
 //@access admin
 const getUser = expressAsyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  if(id === req.user.id || req.user.role === 'admin'){
-  console.log ("req.user.id=",id, req.user ,req.user.role);
-    
-  const user = await User.findById(id);
+  if (id === req.user.id || req.user.role === 'admin') {
+    console.log("req.user.id=", id, req.user, req.user.role);
 
-  if (!user) {
-    return next(new ApiError(`User not found`, 404));
+    const user = await User.findById(id);
+
+    if (!user) {
+      return next(new ApiError(`User not found`, 404));
+    } else {
+      res.status(200).json({
+        status: "success",
+        data: {
+          user,
+        },
+      });
+    }
   } else {
-    res.status(200).json({
-      status: "success",
-      data: {
-        user,
-      },
-    });
+    return next(new ApiError(`User not found`, 404));
   }
-}else{
-  return next(new ApiError(`User not found`, 404));
-}
 });
 
 //@desc update user
@@ -121,22 +123,23 @@ const updateUser = expressAsyncHandler(async (req, res, next) => {
   const { id } = req.params;
 
   let user;
-  console.log(req.user.id);
+  console.log("req.user.id = ", req.user.id);
   console.log(req.params);
-  console.log(id);
+  console.log("Id = ", id);
   // if(id === req.user.id || req.user.role === "admin"){
   //   console.log('this is req.user: ', req.user.id , req.user.role)
   //   console.log(id)
 
-    const { name, profileImg, email, address, phone,  password } = req.body;
+  const { name, profileImg, email, address, phone, password } = req.body;
+  if (req.user._id == id) {             ///// check that He is the profile owner
     user = await User.findOneAndUpdate(
       { _id: id },
       { name, password, phone, email, address, profileImg },
       { new: true }
     );
-  // }else{
-  //   return next(new ApiError("invalid id",401))
-  // }
+  } else {
+    return next(new ApiError("You are not authorized", 401))
+  }
 
 
   if (!user) {

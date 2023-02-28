@@ -24,7 +24,7 @@ const router = express.Router();
 
 router
   .route("/")
-  .get(getBrands)
+  .get(protect, getBrands)
   .post(
     uploadBrandImg,
     resizeBrandImg,
@@ -39,8 +39,8 @@ router
 
 router
   .route("/:id")
-  .get(getBrandValidator, getBrand)
-  .put(uploadBrandImg, resizeBrandImg, updateBrandValidator, updateBrand)
-  .delete(deteleBrandValidator, deteleBrand);
+  .get(protect, getBrandValidator, getBrand)
+  .put(protect, authorize('admin'), uploadBrandImg, resizeBrandImg, updateBrandValidator, updateBrand)
+  .delete(protect, authorize('admin'), deteleBrandValidator, deteleBrand);
 
 module.exports = router;
