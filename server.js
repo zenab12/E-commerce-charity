@@ -19,7 +19,6 @@ dotenv.config({ path: "./config.env" });
 const port = process.env.PORT;
 // const port = 3001;
 
-
 //connect to db
 require("./config/database")();
 
@@ -28,6 +27,30 @@ app.use(express.static(path.join(__dirname, "uploads")));
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+
+
+
+
+var cors = require('cors')
+app.use(cors())
+
+// app.get('/cart', function (req, res, next) {
+//   res.json({ msg: 'This is CORS-enabled for all origins!' })
+// })
+
+// app.listen(80, function () {
+//   console.log('CORS-enabled web server listening on port 80')
+// })
+
+
+
+
+
+
+
+
+
 
 const categoryRoute = require("./routes/categoryRoute");
 const productRoute = require("./routes/productRoute");
