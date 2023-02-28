@@ -1,4 +1,4 @@
-const jwt = require('jsonwebtoken')
+const jwt = require("jsonwebtoken");
 const expressAsyncHandler = require("express-async-handler");
 const ApiError = require("../utils/ApiError");
 const User = require("../models/userModel");
@@ -28,10 +28,11 @@ exports.protect = expressAsyncHandler(async (req, res, next) => {
     } catch (err) {
         return next(new ApiError("Not authorized access", 401))
     }
+
 });
 
-
 // Grant access to specific roles
+
 exports.authorize = (...roles) => {                   /// in case we send more than one role spread them(...role)
     return (req, res, next) => {
         if (!roles.includes(req.user.role)) {
@@ -45,3 +46,4 @@ exports.hash = expressAsyncHandler(async (req, res, next) => {
     req.body.password = await bcrypt.hash(req.body.password, 10);
     next();
 })
+
