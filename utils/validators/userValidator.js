@@ -4,12 +4,12 @@ const validatorMiddleware = require("../../middlewares/validator");
 const User = require("../../models/userModel");
 
 const ApiError = require("../ApiError");
+const ApiFeature = require("../apiFeatures");
 
 const getUserValidator = [
   check("id").isMongoId().withMessage("invalid user id"),
   validatorMiddleware,
 ];
-
 
 const createUserValidator = [
   check("name")
@@ -32,6 +32,7 @@ const createUserValidator = [
       User.findOne({ email: val }).then((User) => {
         if (User) {
           return Promise.reject(new ApiError("email already exists",401));
+          // return Promise.reject(new ApiError("email already exists",401));
         } else {
           return true;
         }
@@ -82,8 +83,10 @@ const updateUserValidator = [
     .custom(async (val, { req }) => {
       User.findOne({ email: val }).then((User) => {
         if (User) {
-          // return Promise.reject("email already exists");
-          return ("email already exists");
+          // return Promise.reject(new ApiError("email already exists",401));
+          // return Promise.reject(new ApiError("email already exists",401));
+
+          return new ApiError("email already exists",401);
         } else {
           return true;
         }

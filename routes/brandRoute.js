@@ -16,6 +16,10 @@ const {
   uploadBrandImg,
   resizeBrandImg,
 } = require("../controllers/brandService");
+
+
+const { protect, authorize } = require("../middlewares/auth")
+
 const router = express.Router();
 
 router

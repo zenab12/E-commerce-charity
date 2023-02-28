@@ -114,7 +114,7 @@ userSchema.methods.getResetPasswordToken = function () {
 }
 
 
-//sign JWT and return 
+//return signed JWT 
 userSchema.methods.getSignedJwtToken = function(){
   return jwt.sign({ userId: this._id }, process.env.JWT_SECRET);
 };

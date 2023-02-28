@@ -15,6 +15,8 @@ const storageMulter = multer.memoryStorage();
 const factory = require("./handlersFactory");
 
 
+const { protect , authorize } = require('../middlewares/auth')
+
 
 const multerFilter = (req, file, cb) => {
   if (file.mimetype.startsWith("image")) {
