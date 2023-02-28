@@ -1,5 +1,5 @@
 const express = require("express");
-const authServices = require("../controllers/auth");
+const {authorize , protect} = require("../middlewares/auth");
 const router = express.Router();
 
 const { createCashOrder,
@@ -11,23 +11,23 @@ const { createCashOrder,
 } = require("../controllers/orderService");
 
 
-router.use(authServices.protect,);
+// router.use(authorize.protect);
 
 
-router.route("/:cartId").post(authServices.allowedTo('user'),createCashOrder);
+router.route("/:cartId").post(authorize('user'),createCashOrder);
 
 router.get('/',
-           authServices.allowedTo('user','admin','manager'),
+           authorize('user','admin'),
            filterOrderForLoggedUser,
            findAllOrders);
 router.get('/:id',findSpecificOrder);
 
 router.put('/:id/pay',
-           authServices.allowedTo('admin','manager'),
+           authorize('admin'),
            updateOrderToPaid);
 
 router.put('/:id/Deliver',
-           authServices.allowedTo('admin','manager'),
+           authorize('admin'),
            updateOrderToDelivered);           
 
 
