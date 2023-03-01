@@ -13,7 +13,8 @@ router
   .get(
     // protect,
     // authorize("admin"),
-    userController.getUsers)
+    userController.getUsers
+  )
   .post(
     userController.uploadUserImg,
     (req, res, next) => {
@@ -29,7 +30,7 @@ router
   .route("/:id")
   .get(
     userValidator.getUserValidator,
-    // protect,
+    protect,
     // authorize("admin"),
     userController.getUser
   )

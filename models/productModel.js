@@ -26,7 +26,7 @@ const productSchema = new mongoose.Schema(
       require: [true, "Product quantity is required"],
     },
     sold: {
-      type: String,
+      type: Number,
       default: 0, // nothing sold yet it starts with  0
     },
     price: {

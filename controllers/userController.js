@@ -25,12 +25,14 @@ const uploadUserImg = uploadSingleImg("profileImg");
 //image processing
 const resizeUserImg = expressAsyncHandler(async (req, res, next) => {
   const filename = `user-${uuid4()}-${Date.now()}.jpeg`;
-  await sharp(req.file.buffer)
-    .resize(300, 300)
-    .jpeg({ quality: 90 })
-    .toFile(`uploads/users/${filename}`);
-  //save image in db
-  req.body.profileImg = filename;
+  if (req.file) {
+    await sharp(req.file.buffer)
+      .resize(300, 300)
+      .jpeg({ quality: 90 })
+      .toFile(`uploads/users/${filename}`);
+    //save image in db
+    req.body.profileImg = filename;
+  }
   next();
 });
 
@@ -38,7 +40,6 @@ const resizeUserImg = expressAsyncHandler(async (req, res, next) => {
 //@route POST /users
 //@access public
 const createUser = expressAsyncHandler(async (req, res, next) => {
-
   const user = await User.create({
     ...req.body,
   });
@@ -94,24 +95,24 @@ const getUsers = expressAsyncHandler(async (req, res) => {
 //@access admin
 const getUser = expressAsyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  if(id === req.user.id || req.user.role === 'admin'){
-  console.log ("req.user.id=",id, req.user ,req.user.role);
-    
-  const user = await User.findById(id);
+  if (id === req.user.id || req.user.role === "admin") {
+    console.log("req.user.id=", id, req.user, req.user.role);
 
-  if (!user) {
-    return next(new ApiError(`User not found`, 404));
+    const user = await User.findById(id);
+
+    if (!user) {
+      return next(new ApiError(`User not found`, 404));
+    } else {
+      res.status(200).json({
+        status: "success",
+        data: {
+          user,
+        },
+      });
+    }
   } else {
-    res.status(200).json({
-      status: "success",
-      data: {
-        user,
-      },
-    });
+    return next(new ApiError(`User not found`, 404));
   }
-}else{
-  return next(new ApiError(`User not found`, 404));
-}
 });
 
 //@desc update user
@@ -128,16 +129,15 @@ const updateUser = expressAsyncHandler(async (req, res, next) => {
   //   console.log('this is req.user: ', req.user.id , req.user.role)
   //   console.log(id)
 
-    const { name, profileImg, email, address, phone,  password } = req.body;
-    user = await User.findOneAndUpdate(
-      { _id: id },
-      { name, password, phone, email, address, profileImg },
-      { new: true }
-    );
+  const { name, profileImg, email, address, phone, password } = req.body;
+  user = await User.findOneAndUpdate(
+    { _id: id },
+    { name, password, phone, email, address, profileImg },
+    { new: true }
+  );
   // }else{
   //   return next(new ApiError("invalid id",401))
   // }
-
 
   if (!user) {
     return next(new ApiError(`User not found`, 404));
