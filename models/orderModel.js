@@ -1,54 +1,52 @@
 const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema(
-  {
-    user: {
-      type: mongoose.Types.ObjectId,
-      ref: "User",
-      require: [true, "Order must belong to User"],
-    },
-    cartItems: [
-      {
-        product: {
-          type: mongoose.Types.ObjectId,
-          ref: "Product",
+    {
+        user: {
+            type: mongoose.Types.ObjectId,
+            ref: "User",
+            require: [true, "Order must belong to User"],
         },
-        quantity: Number,
-        color: String,
-        price: Number,
-      },
-    ],
-    taxPrice: {
-      type: Number,
-      default: 0,
-    },
-    shippingAddress: {
-      details: String,
-      phone: String,
-      city: String,
-      postalCode: String,
-    },
-    shippingPrice: {
-      type: Number,
-      default: 0,
-    },
-    totalOredrPrice: {
-      type: Number,
-    },
-    paymentMethodType: {
-      type: String,
-      enum: ["cart", "cash"],
-      default: "cash",
-    },
-    isPaid: {
-      type: Boolean,
-      default: false,
-    },
-    paidAt: Date,
-    isDeliverd: {
-      type: Boolean,
-      default: false,
-    },
+        cartItems: [{
+            product: {
+                type: mongoose.Types.ObjectId,
+                ref: "Product",
+            },
+            quantity: Number,
+            color: String,
+            price: Number
+        }],
+        taxPrice: {
+            type: Number,
+            default: 0
+        },
+        shippingAddress: {
+            details: String,
+            phone: String,
+            city: String,
+            postalCode: String
+        },
+        shippingPrice: {
+            type: Number,
+            default: 0
+        },
+        totalOredrPrice: {
+            type: Number
+        },
+        paymentMethodType: {
+            type: String,
+            enum: ['meals', 'cash'],
+            default: 'cash'
+        },
+        isPaid: {
+            type: Boolean,
+            default: false,
+        },
+        paidAt: Date,
+        isDeliverd: {
+            type: Boolean,
+            default: false,
+        },
     deliverdAt: Date,
   },
 
