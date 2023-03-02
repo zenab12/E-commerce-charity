@@ -10,6 +10,8 @@ const { updateOne } = require("../models/orderModel");
 //create cash order
 exports.createCashOrder = asyncHandler(async (req, res, next) => {
     console.log(req.params.cartId)
+    console.log("boooooooooooooody", req.body)
+
     console.log("hellllllos")
     //app setting  added by admin 
     const taxPrice = 0;
@@ -32,6 +34,7 @@ exports.createCashOrder = asyncHandler(async (req, res, next) => {
     const order = await OrderModel.create({
         user: req.user._id,
         cartItems: cart.cartItems,
+        paymentMethodType: req.body.paymentMethodType,
         // shippingAddress:req.body.shippingAddress,
         totalOrderPrice
     });

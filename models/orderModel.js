@@ -35,7 +35,7 @@ const orderSchema = new mongoose.Schema(
         },
         paymentMethodType: {
             type: String,
-            enum: ['cart', 'cash'],
+            enum: ['meals', 'cash'],
             default: 'cash'
         },
         isPaid: {

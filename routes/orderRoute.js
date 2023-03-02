@@ -1,7 +1,13 @@
 const express = require("express");
-const { authorize, protect } = require("../middlewares/auth");
-const router = express.Router();
+const cors = require('cors');
 
+
+const router = express.Router();
+router.use(cors());
+
+
+
+const { authorize, protect } = require("../middlewares/auth");
 const { createCashOrder,
     findAllOrders,
     findSpecificOrder,
