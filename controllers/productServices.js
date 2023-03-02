@@ -15,7 +15,7 @@ const storageMulter = multer.memoryStorage();
 const factory = require("./handlersFactory");
 
 
-const { protect , authorize } = require('../middlewares/auth')
+const { protect, authorize } = require('../middlewares/auth')
 
 
 const multerFilter = (req, file, cb) => {
@@ -55,9 +55,8 @@ exports.reziseMixofImages = expressAsyncHandler(async (req, res, next) => {
 
     await Promise.all(
       req.files.images.map(async (file, i) => {
-        const imageFilename = `product-${uuid4()}-${Date.now()}-image-${
-          i + 1
-        }.jpeg`;
+        const imageFilename = `product-${uuid4()}-${Date.now()}-image-${i + 1
+          }.jpeg`;
 
         await sharp(file.buffer)
           .resize(2000, 1333)
@@ -72,7 +71,7 @@ exports.reziseMixofImages = expressAsyncHandler(async (req, res, next) => {
 
 //All products
 
-exports.getproducts = factory.getAll(productModel,'productModel');
+exports.getproducts = factory.getAll(productModel, 'productModel');
 
 //product By ID
 exports.getProduct = factory.getOne(productModel);

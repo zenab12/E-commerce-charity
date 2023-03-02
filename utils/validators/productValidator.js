@@ -21,11 +21,11 @@ exports.createProductValidator = [
     .isLength({ max: 2000 })
     .withMessage("too long description"),
 
-  check("quantity")
-    .notEmpty()
-    .withMessage("Product quantity is required")
-    .isNumeric()
-    .withMessage("Product quantity Must Be a Number"),
+  // check("quantity")
+  //   .notEmpty()
+  //   .withMessage("Product quantity is required")
+  //   .isNumeric()
+  //   .withMessage("Product quantity Must Be a Number"),
 
   check("sold")
     .optional()
@@ -37,7 +37,7 @@ exports.createProductValidator = [
     .withMessage("Product price is required")
     .isNumeric()
     .withMessage("Product price Must Be a Number")
-    .isLength({ max: 20 })
+    .isLength({ max: 500 })
     .withMessage("too long price"),
 
   check("priceAfterDiscount")
@@ -66,11 +66,11 @@ exports.createProductValidator = [
     .isMongoId()
     .withMessage("Invalid ID Formate"),
 
-  check("brand")
-    .notEmpty()
-    .withMessage("Product brand is required")
-    .isMongoId()
-    .withMessage("Invalid ID Formate"),
+  // check("brand")
+  //   .notEmpty()
+  //   .withMessage("Product brand is required")
+  //   .isMongoId()
+  //   .withMessage("Invalid ID Formate"),
 
   check("ratingAverage")
     .optional()
@@ -139,7 +139,7 @@ exports.updateProductValidator = [
     .optional()
     .isNumeric()
     .withMessage("Product price Must Be a Number")
-    .isLength({ max: 20 })
+    .isLength({ max: 500 })
     .withMessage("too long price"),
 
   check("priceAfterDiscount")

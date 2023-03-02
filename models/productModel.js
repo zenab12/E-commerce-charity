@@ -13,9 +13,13 @@ const productSchema = new mongoose.Schema(
     },
     slug: {
       type: String,
-      require: true,
-      lowercase: true,
+      default: false,
     },
+    // addToCart: {
+    //   type: Boolean,
+    //   default: true,
+    //   lowercase: true,
+    // },
     description: {
       type: String,
       require: [true, "Product description is required"],
@@ -23,7 +27,8 @@ const productSchema = new mongoose.Schema(
     },
     quantity: {
       type: Number,
-      require: [true, "Product quantity is required"],
+      default: 1,
+      // require: [true, "Product quantity is required"],
     },
     sold: {
       type: Number,
@@ -33,7 +38,7 @@ const productSchema = new mongoose.Schema(
       type: Number,
       require: [true, "Product price is required"],
       trim: true,
-      max: [20, "Price should not be more than 20 characters"],
+      // max: [20, "Price should not be more than 20 characters"],
     },
     priceAfterDiscount: {
       type: Number,
@@ -50,10 +55,10 @@ const productSchema = new mongoose.Schema(
       ref: "Category",
       require: [true, "Product must belong to category"],
     },
-    brand: {
-      type: Schema.Types.ObjectId, //mongoose.Schema.objectId,
-      ref: "Brand",
-    },
+    // brand: {
+    //   type: Schema.Types.ObjectId, //mongoose.Schema.objectId,
+    //   ref: "Brand",
+    // },
     ratingAverage: {
       type: Number,
       min: [0, "Rating must be above or equal 1"],
