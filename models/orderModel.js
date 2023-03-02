@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const orderSchema = new mongoose.Schema(
+
     {
         user: {
             type: mongoose.Types.ObjectId,
@@ -49,7 +50,37 @@ const orderSchema = new mongoose.Schema(
         },
         deliverdAt: Date,
     },
-    { timestamps: true }
+    shippingAddress: {
+      details: String,
+      phone: String,
+      city: String,
+      postalCode: String,
+    },
+    shippingPrice: {
+      type: Number,
+      default: 0,
+    },
+    totalOredrPrice: {
+      type: Number,
+    },
+    paymentMethodType: {
+      type: String,
+      enum: ["cart", "cash"],
+      default: "cash",
+    },
+    isPaid: {
+      type: Boolean,
+      default: false,
+    },
+    paidAt: Date,
+    isDeliverd: {
+      type: Boolean,
+      default: false,
+    },
+    deliverdAt: Date,
+  },
+
+  { timestamps: true }
 );
 
 //pre middleware for population
@@ -59,4 +90,4 @@ orderSchema.pre(/^find/, function (next) {
     next();
 });
 
-module.exports = mongoose.model('Order', orderSchema);
+module.exports = mongoose.model("Order", orderSchema);
