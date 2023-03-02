@@ -1,5 +1,5 @@
 const express = require("express");
-var cors = require('cors')
+// var cors = require('cors')
 const { protect, authorize } = require('../middlewares/auth');
 
 const {
@@ -20,7 +20,7 @@ const {
 } = require("../controllers/productServices");
 
 const router = express.Router();
-router.use(cors())
+// router.use(cors())
 
 router
   .route("/")
@@ -34,7 +34,6 @@ router
       next();
     },
     createProductValidator,
-    protect,
     createProduct
   );
 

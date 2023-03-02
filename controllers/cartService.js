@@ -21,30 +21,47 @@ const calcTotalCartDonation = (cart) => {
 
 exports.addProductToCart = expressAsyncHandler(async (req, res, next) => {
     const { productId } = req.body;
+    const { minus } = req.body;
     const product = await Product.findById(productId);
-    // Get cart for logged user
-    let cart = await Cart.findOne({ user: req.user._id }); /////  req.user comes from protect middleware
-    // console.log("cart",cart)
-    // console.log("req.user._id",req.user._id)
-    if (!cart) {
-        //create cart for this user and add this product
-        cart = await Cart.create({
-            user: req.user._id,
-            cartItems: [{ product: productId, price: product.price }],
-        });
-    } else {
-        // product exist in cart , update quantity
+    let cart = await Cart.findOne({ user: req.user._id });
+    if (minus) {
         const productIndex = cart.cartItems.findIndex(
             (item) => item.product?.toString() === productId
         );
-        if (productIndex > -1) {
+        if (product.quantity > 0) {
             const cartItem = cart.cartItems[productIndex];
-            cartItem.quantity += 1;
+            cartItem.quantity -= 1;
             cart.cartItems[productIndex] = cartItem;
         } else {
-            // product not exist in cart, push product to cartItem array
-            cart.cartItems.push({ product: productId, price: product.price });
+            cartItem.quantity = 0;
+            cart.cartItems[productIndex] = cartItem;
         }
+    } else {
+
+
+        // Get cart for logged user
+        // let cart = await Cart.findOne({ user: req.user._id }); /////  req.user comes from protect middleware
+        if (!cart) {
+            //create cart for this user and add this product
+            cart = await Cart.create({
+                user: req.user._id,
+                cartItems: [{ product: productId, price: product.price, title: product.title }],
+            });
+        } else {
+            // product exist in cart , update quantity
+            const productIndex = cart.cartItems.findIndex(
+                (item) => item.product?.toString() === productId
+            );
+            if (productIndex > -1) {
+                const cartItem = cart.cartItems[productIndex];
+                cartItem.quantity += 1;
+                cart.cartItems[productIndex] = cartItem;
+            } else {
+                // product not exist in cart, push product to cartItem array
+                cart.cartItems.push({ product: productId, price: product.price, title: product.title });
+            }
+        }
+
     }
 
     // calc total cart donation
@@ -59,45 +76,6 @@ exports.addProductToCart = expressAsyncHandler(async (req, res, next) => {
         data: cart,
     });
 });
-
-
-
-
-
-//////
-
-
-
-// exports.addProductToCart = expressAsyncHandler(async (req, res, next) => {
-//     const { productId } = req.body;
-//     const product = await Product.findById(productId);
-//     // Get cart for logged user
-//     let cart = await Cart.findOne({ user: req.user._id }); /////  req.user comes from protect middleware
-//     // console.log("cart",cart)
-//     // console.log("req.user._id",req.user._id)
-//     if (!cart) {
-//         //create cart for this user and add this product
-//         cart = await Cart.create({
-//             user: req.user._id,
-//             cartItems: [{ product: productId, price: product.price }],
-//         });
-//     } else {
-//         // product exist in cart , update quantity
-//         cart.cartItems.push({ product: productId, price: product.price });
-//     }
-
-//     // calc total cart donation
-//     calcTotalCartDonation(cart);
-
-//     await cart.save();
-
-//     res.status(200).json({
-//         status: "success",
-//         message: "product added to cart successfully",
-//         numOfCartItems: cart.cartItems.length,
-//         data: cart,
-//     });
-// });
 
 
 
@@ -125,12 +103,26 @@ exports.getLoggedUserCart = expressAsyncHandler(async (req, res, next) => {
 //@access private/User
 
 exports.removeSpecificCartItem = expressAsyncHandler(async (req, res, next) => {
+
     const cart = await Cart.findOneAndUpdate({ user: req.user._id },
         {
-            $pull: { cartItems: { _id: req.params.itemId } }
+            $pull: { cartItems: { product: req.params.itemId } }
         },
         { new: true }
     );
+
+    // const cart = await Cart.findOne({ user: req.user._id });
+    // let cartItems = cart.cartItems;
+    // cartItems = cartItems.filter(item => {
+    //     console.log("item", item.product);
+    //     console.log("req.user._id", req.params.itemId);
+
+    //     return item.product === req.params.itemId
+    // })
+    // cartItems = cartItems.filter(item => item.quantity == 6)
+
+
+    console.log("removeSpecificCartItem", req.params.itemId, "cart", cart)
     calcTotalCartDonation(cart);
     cart.save();
     res.status(200).json({

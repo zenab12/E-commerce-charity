@@ -32,8 +32,6 @@ app.use(bodyParser.json());
 
 
 
-var cors = require('cors')
-app.use(cors())
 
 // app.get('/cart', function (req, res, next) {
 //   res.json({ msg: 'This is CORS-enabled for all origins!' })
