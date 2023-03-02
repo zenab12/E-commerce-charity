@@ -12,7 +12,7 @@ const dbConnection = () => {
   //     console.log(`connected successfully ${con.connection.host}`)
   //   );
 
-  ////connect on db locally
+  //////connect on db locally
   mongoose
     .connect("mongodb://127.0.0.1:27017/E-commerce")
     .then(() => console.log("connected to db successfully"));

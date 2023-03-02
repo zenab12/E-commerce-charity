@@ -44,27 +44,28 @@ exports.getOne = (Model) =>
   });
 
 
-exports.getAll = (Model,modelName ='') => 
-asyncHandler (async(req, res) => {
-   let filter ={};
-   if(req.filterObj){
-    filter=req.filterObj;
-   }
+exports.getAll = (Model, modelName = '') =>
+  asyncHandler(async (req, res) => {
+    console.log("req.params", req.query)
+    let filter = {};
+    if (req.filterObj) {
+      filter = req.filterObj;
+    }
 
-//3)build query
-  const documentCount= await Model.countDocuments();
-   const apiFeatures=new  ApiFeature(Model.find(filter),req.query)
+    //3)build query
+    const documentCount = await Model.countDocuments();
+    const apiFeatures = new ApiFeature(Model.find(filter), req.query)
       .filter()
       .sort()
       .search(modelName)
       .pagenation(documentCount)
       .limitFields()
 
-    
-    //execute query
-    const {mongooseQuery,pagenationResult}=apiFeatures;
-    const document= await apiFeatures.mongooseQuery;
-    
-    res.status(200).json({result:document.length,pagenationResult,data:document});
 
-});
+    //execute query
+    const { mongooseQuery, pagenationResult } = apiFeatures;
+    const document = await apiFeatures.mongooseQuery;
+
+    res.status(200).json({ result: document.length, pagenationResult, data: document });
+
+  });
