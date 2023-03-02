@@ -25,8 +25,6 @@ const ApiError = require("../utils/ApiError");
 const ApiFeature = require("../utils/apiFeatures");
 
 
-
-
 //All Brands
 
 exports.getBrands = factory.getAll(BrandModel);

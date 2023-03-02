@@ -4,8 +4,10 @@ const authController = require("./../controllers/auth");
 const router = express.Router();
 const userValidator = require("../utils/validators/userValidator");
 const authValidator = require("../utils/validators/authValidator");
+var cors = require("cors");
 
 const { protect, authorize } = require("./../middlewares/auth");
+router.use(cors());
 
 const { hash } = require("../middlewares/auth");
 router
@@ -24,8 +26,17 @@ router
     },
     // userValidator.createUserValidator,
     hash,
-    /*protect, authorize("admin"),*/ userController.createUser
+    protect,
+    // authorize("admin"),
+    userController.createUser
   );
+
+// router.route("/").get(
+//   userValidator.getUserValidator,
+//   protect,
+//   // authorize("admin"),
+//   userController.getUserByEmail
+// );
 router
   .route("/:id")
   .get(

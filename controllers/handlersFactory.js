@@ -44,19 +44,20 @@ exports.getOne = (Model) =>
   });
 
 
-exports.getAll = (Model) => 
-asyncHandler (async(req, res, next) => {
-    //1)Filtering 
-
-
-    //2)pagenation
+exports.getAll = (Model,modelName ='') => 
+asyncHandler (async(req, res) => {
+   let filter ={};
+   if(req.filterObj){
+    filter=req.filterObj;
+   }
 
 //3)build query
-   const apiFeatures=new  ApiFeature(Model.find(),req.query)
+  const documentCount= await Model.countDocuments();
+   const apiFeatures=new  ApiFeature(Model.find(filter),req.query)
       .filter()
       .sort()
-      .search()
-      .pagenation()
+      .search(modelName)
+      .pagenation(documentCount)
       .limitFields()
 
     

@@ -1,5 +1,5 @@
 const express = require("express");
-
+var cors = require('cors')
 const { protect, authorize } = require('../middlewares/auth');
 
 const {
@@ -20,11 +20,12 @@ const {
 } = require("../controllers/productServices");
 
 const router = express.Router();
+router.use(cors())
 
 router
   .route("/")
   .get(getproducts)
-  .post(
+  .post(protect, authorize("admin"),
     uploadofImages,
     reziseMixofImages,
     (req, res, next) => {
@@ -39,8 +40,8 @@ router
 
 router
   .route("/:id")
-  .get(getProductValidator, getProduct)
-  .put(uploadofImages, updateProductValidator, updateProduct)
-  .delete(deteleProductValidator, deteleProduct);
+  .get(protect, getProductValidator, getProduct)
+  .put(protect, authorize("admin"), uploadofImages, updateProductValidator, updateProduct)
+  .delete(protect, authorize("admin"), protect, deteleProductValidator, deteleProduct);
 
 module.exports = router;

@@ -17,6 +17,7 @@ require("dotenv/config");
 require("dotenv").config({ path: `${__dirname}/config.env` });
 dotenv.config({ path: "./config.env" });
 const port = process.env.PORT;
+// const port = 3001;
 
 //connect to db
 require("./config/database")();
@@ -41,8 +42,13 @@ app.use(compression());
 const categoryRoute = require("./routes/categoryRoute");
 const productRoute = require("./routes/productRoute");
 const brandtRoute = require("./routes/brandRoute");
+
+const orderRoute = require("./routes/orderRoute");
+//auth,user,cart
+
 const cartRoute = require("./routes/cartRoute");
 
+// userRouter ,authRouter
 //routes
 app.use("/users", userRouter);
 app.use("/auth", authRouter);
@@ -50,6 +56,8 @@ app.use("/products", productRoute);
 
 app.use("/category", categoryRoute);
 app.use("/brands", brandtRoute);
+app.use("/oreders", orderRoute);
+
 app.use("/cart", cartRoute);
 
 //route is not exist
