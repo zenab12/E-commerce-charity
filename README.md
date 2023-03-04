@@ -2,7 +2,7 @@
 
 ### RESTful API Node Express Mongoose Application about Charity organization called Hyatk 👩‍💻 ⭐
 
-- The project builds RESTful APIs using Node.js, Express and Mongoose,... 🔥⭐  
+The project builds RESTful APIs using Node.js, Express and Mongoose,... 🔥⭐  
 
 ### Manual Installation 📥👋  :
 
