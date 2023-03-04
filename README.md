@@ -103,21 +103,6 @@ EMAIL_PASSWORD =
 
 ## Project Structure
 
-```
-public\             # Public folder
- |--index.html      # Static html
-src\
- |--config\         # Environment variables and configuration
- |--controllers\    # Controllers
- |--middlewares\    # Custom express middlewares
- |--models\         # Mongoose models
- |--routes\         # Routes
- |--services\       # Business logic
- |--utils\          # Utility classes and functions
- |--validations\    # Request data validation schemas
- |--index.js        # App entry point
-```
-
  ```
 ├── E-COMMERCE-CHARITY
 │   ├── server.js
