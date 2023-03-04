@@ -229,5 +229,4 @@ List of available routes:
 ## License
 ```
    Copyright (C) 2023 Z,H,N,M Team ❤️
-
 ```
