@@ -97,7 +97,7 @@ const getUsers = expressAsyncHandler(async (req, res) => {
 //@access admin
 const getUser = expressAsyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  if (id == req.user.id || req.user.role === 'admin') {
+  if (id == req.user.id || req.user.role === "admin") {
     console.log("req.user.id=", id, req.user, req.user.role);
 
     const user = await User.findById(id);
