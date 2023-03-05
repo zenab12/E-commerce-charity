@@ -7,7 +7,6 @@ const Product = require("./../models/productModel");
 const calcTotalCartDonation = (cart) => {
     let totalDonation = 0;
     cart.cartItems.forEach((item) => {
-        console.log(item.quantity, "price", item.price);
         totalDonation += item.quantity * item.price;
     });
     cart.totalCartDonation = totalDonation;
@@ -86,7 +85,6 @@ exports.addProductToCart = expressAsyncHandler(async (req, res, next) => {
 
 exports.getLoggedUserCart = expressAsyncHandler(async (req, res, next) => {
     const cart = await Cart.findOne({ user: req.user._id });
-    // const cart = await Cart.findOne({ user: "63e825de00fee4c3efd3b93c" });
     if (!cart) {
         return next(new ApiError("There is no cart for this user", 404));
     }
@@ -111,18 +109,15 @@ exports.removeSpecificCartItem = expressAsyncHandler(async (req, res, next) => {
         { new: true }
     );
 
+    /// Another solution
+
     // const cart = await Cart.findOne({ user: req.user._id });
     // let cartItems = cart.cartItems;
     // cartItems = cartItems.filter(item => {
-    //     console.log("item", item.product);
-    //     console.log("req.user._id", req.params.itemId);
-
     //     return item.product === req.params.itemId
     // })
-    // cartItems = cartItems.filter(item => item.quantity == 6)
 
 
-    console.log("removeSpecificCartItem", req.params.itemId, "cart", cart)
     calcTotalCartDonation(cart);
     cart.save();
     res.status(200).json({

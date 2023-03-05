@@ -9,34 +9,29 @@ const { updateOne } = require("../models/orderModel");
 
 //create cash order
 exports.createCashOrder = asyncHandler(async (req, res, next) => {
-    console.log(req.params.cartId)
-    console.log("boooooooooooooody", req.body)
-
-    console.log("hellllllos")
     //app setting  added by admin 
     const taxPrice = 0;
     const shippingPrice = 0;
 
     // 1) get cart depend on cardId
     const cart = await CartModel.findById(req.params.cartId);
-    console.log(cart);
     if (!cart) {
         return next(
             new ApiError(`there is no Cart with id : ${req.params}`, 404));
     }
 
     //2) get oreder price depend on cart price "check if there is any discount"
-    const cartPrice = cart.totalCartPrice;
+    const cartPrice = cart.totalCartDonation;
 
     const totalOrderPrice = cartPrice;
-
+    console.log("total order price = ", totalOrderPrice)
     //3) create order by default paymentMethodType -> Cash
     const order = await OrderModel.create({
         user: req.user._id,
         cartItems: cart.cartItems,
         paymentMethodType: req.body.paymentMethodType,
         // shippingAddress:req.body.shippingAddress,
-        totalOrderPrice
+        totalOredrPrice: totalOrderPrice
     });
 
     //4) after creating order , decrement product quantity , increment product sold 
@@ -45,7 +40,8 @@ exports.createCashOrder = asyncHandler(async (req, res, next) => {
         const bulkOption = cart.cartItems.map((item) => ({
             updateOne: {
                 filter: { _id: item.product },
-                update: { $inc: { quantity: -item.quantity, sold: +item.quantity } },
+                // update: { $inc: { quantity: -item.quantity } },
+                update: { $inc: { sold: +item.quantity, quantity: -item.quantity } },
             }
         }))
         await ProductModel.bulkWrite(bulkOption, {});

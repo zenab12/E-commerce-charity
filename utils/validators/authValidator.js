@@ -48,8 +48,8 @@ exports.signupValidator = [
         .withMessage("password is required")
         .isLength({ min: 6 })
         .withMessage("min length for password is 6 "),
-    check("profileImg").optional(),
-    check("role").optional(),
+    // check("profileImg").optional(),
+    // check("role").optional(),
 
 
     // check('password')

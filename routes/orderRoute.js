@@ -23,6 +23,7 @@ const { createCashOrder,
 router.route("/:cartId").post(protect, authorize('user'), createCashOrder);
 
 router.get('/',
+    protect,
     authorize('user', 'admin'),
     filterOrderForLoggedUser,
     findAllOrders);

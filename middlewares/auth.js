@@ -3,6 +3,8 @@ const expressAsyncHandler = require("express-async-handler");
 const ApiError = require("../utils/ApiError");
 const User = require("../models/userModel");
 const bcrypt = require('bcryptjs');
+
+
 exports.protect = expressAsyncHandler(async (req, res, next) => {
     let token;
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
@@ -10,20 +12,16 @@ exports.protect = expressAsyncHandler(async (req, res, next) => {
     }
     // else if(req.cookies.token){
     //     token = req.cookies.token;
-    //     console.log(token)
     // }
 
-    console.log(" req.headers: ", req.headers.authorization);
-    console.log("token from protect: ", token);
+
     // make sure token exist
     if (!token) {
         return next(new ApiError("Not authorized access", 401))
     }
     try {
         const { userId } = jwt.verify(token, process.env.JWT_SECRET);
-        console.log(userId);
         req.user = await User.findById(userId);
-        console.log("this is from protect middleware : ", req.user._id);
         next();
     } catch (err) {
         return next(new ApiError("Not authorized access", 401))
@@ -43,7 +41,7 @@ exports.authorize = (...roles) => {                   /// in case we send more t
 }
 
 exports.hash = expressAsyncHandler(async (req, res, next) => {
-    req.body.password = await bcrypt.hash(req.body.password, 10);
+    req.body.password = await bcrypt.hash(req.body.password, 10);   //10 ===> salting iterations to create salt
     next();
 })
 

@@ -31,7 +31,7 @@ const orderSchema = new mongoose.Schema(
             default: 0
         },
         totalOredrPrice: {
-            type: Number
+            type: Number,
         },
         paymentMethodType: {
             type: String,

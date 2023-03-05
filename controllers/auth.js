@@ -67,7 +67,8 @@ exports.forgotPassword = expressAsyncHandler(async (req, res, next) => {
 
     // create reset url
     const resetUrl = `${req.protocol}://${req.get('host')}/auth/resetpassword/${resetToken}`;
-    const message = `You recieve this email to reset password. Please make a put request to: \n\n${resetUrl}`;
+    const message = `${req.protocol}://localhost:4200/auth/resetpassword/${resetToken}`;
+    const yourUrl = `${resetUrl}`;
 
     await user.save();
 
@@ -77,7 +78,7 @@ exports.forgotPassword = expressAsyncHandler(async (req, res, next) => {
             subject: 'password reset token',
             message
         });
-        res.status(200).json({ success: true, data: "email sent" })
+        res.status(200).json({ success: true, data: "email sent", yourUrl })
     } catch (err) {
         console.log(err);
         user.passwordResetExpires = undefined;
@@ -126,10 +127,7 @@ const sendTokenResponse = (user, statusCode, res) => {
         httpOnly: true
     };
 
-    // if(process.env.NODE_ENV === 'production'){
-    //     options.secure = true;                                                  /// not working
-    // }
-
+    
     res.status(200).cookie('token', token, options).json({
         success: true,
         user,

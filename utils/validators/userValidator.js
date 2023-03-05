@@ -32,6 +32,7 @@ const createUserValidator = [
       User.findOne({ email: val }).then((User) => {
         if (User) {
           return Promise.reject(new ApiError("email already exists", 401));
+          return Promise.reject(new ApiError("email already exists", 401));
           // return Promise.reject(new ApiError("email already exists",401));
         } else {
           return true;
@@ -90,6 +91,7 @@ const updateUserValidator = [
           // return Promise.reject(new ApiError("email already exists",401));
           // return Promise.reject(new ApiError("email already exists",401));
 
+          return new ApiError("email already exists", 401);
           return new ApiError("email already exists", 401);
         } else {
           return true;
