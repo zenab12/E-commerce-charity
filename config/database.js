@@ -13,9 +13,15 @@ const dbConnection = () => {
   //   );
 
   //////connect on db locally
+  // mongoose
+  //   .connect("mongodb://127.0.0.1:27017/E-commerce")
+  //   .then(() => console.log("connected to db successfully"));
+
+
   mongoose
-    .connect("mongodb://127.0.0.1:27017/E-commerce")
+    .connect("mongodb://127.0.0.1:27017/AngularProject")
     .then(() => console.log("connected to db successfully"));
+
 };
 
 module.exports = dbConnection;

@@ -25,17 +25,30 @@ const { uploadSingleImg } = require("../middlewares/uploadImage");
 //upload image
 const uploadUserImg = uploadSingleImg("profileImg");
 //image processing
+// const resizeUserImg = expressAsyncHandler(async (req, res, next) => {
+//   const filename = `user-${uuid4()}-${Date.now()}.jpeg`;
+//   await sharp(req.file.buffer)
+//     .resize(300, 300)
+//     .jpeg({ quality: 90 })
+//     .toFile(`uploads/users/${filename}`);
+//   //save image in db
+//   req.body.profileImg = filename;
+//   next();
+// });
+
+
 const resizeUserImg = expressAsyncHandler(async (req, res, next) => {
   const filename = `user-${uuid4()}-${Date.now()}.jpeg`;
-  await sharp(req.file.buffer)
-    .resize(300, 300)
-    .jpeg({ quality: 90 })
-    .toFile(`uploads/users/${filename}`);
-  //save image in db
-  req.body.profileImg = filename;
+  if (req.file) {
+    await sharp(req.file.buffer)
+      .resize(300, 300)
+      .jpeg({ quality: 90 })
+      .toFile(`uploads/users/${filename}`);
+    //save image in db
+    req.body.profileImg = filename;
+  }
   next();
 });
-
 //@desc create user
 //@route POST /users
 //@access public
@@ -123,12 +136,8 @@ const updateUser = expressAsyncHandler(async (req, res, next) => {
   const { id } = req.params;
 
   let user;
-  console.log("req.user.id = ", req.user.id);
-  console.log(req.params);
-  console.log("Id = ", id);
+
   // if(id === req.user.id || req.user.role === "admin"){
-  //   console.log('this is req.user: ', req.user.id , req.user.role)
-  //   console.log(id)
 
   const { name, profileImg, email, address, phone, password } = req.body;
   if (req.user._id == id) {             ///// check that He is the profile owner
