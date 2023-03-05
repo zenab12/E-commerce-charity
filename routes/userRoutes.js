@@ -4,6 +4,7 @@ const authController = require("./../controllers/auth");
 const router = express.Router();
 const userValidator = require("../utils/validators/userValidator");
 const authValidator = require("../utils/validators/authValidator");
+
 // var cors = require('cors')
 
 const { protect, authorize } = require("./../middlewares/auth");
@@ -15,7 +16,8 @@ router
   .get(
     // protect,
     // authorize("admin"),
-    userController.getUsers)
+    userController.getUsers
+  )
   .post(
     userController.uploadUserImg,
     (req, res, next) => {
@@ -29,6 +31,13 @@ router
     // authorize("admin"),
     userController.createUser
   );
+
+// router.route("/").get(
+//   userValidator.getUserValidator,
+//   protect,
+//   // authorize("admin"),
+//   userController.getUserByEmail
+// );
 router
   .route("/:id")
   .get(

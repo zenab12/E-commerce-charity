@@ -7,16 +7,13 @@ const multer = require("multer");
 const sharp = require("sharp");
 const { uploadMixofImages } = require("../middlewares/uploadImage");
 
-
 const ApiFeature = require("../utils/apiFeatures");
 
 const storageMulter = multer.memoryStorage();
 
 const factory = require("./handlersFactory");
 
-
-const { protect, authorize } = require('../middlewares/auth')
-
+const { protect, authorize } = require("../middlewares/auth");
 
 const multerFilter = (req, file, cb) => {
   if (file.mimetype.startsWith("image")) {
@@ -40,23 +37,24 @@ exports.uploadofImages = uploadMixofImages([
 ]);
 
 exports.reziseMixofImages = expressAsyncHandler(async (req, res, next) => {
+  const imageCoverFilename = `product-${uuid4()}-${Date.now()}-cover.jpeg`;
   console.log(req.files);
   if (req.files.imageCover) {
-    const imageCoverFilename = `product-${uuid4()}-${Date.now()}-cover.jpeg`;
     await sharp(req.files.imageCover[0].buffer)
       .resize(2000, 1333)
       .jpeg({ quality: 90 })
       .toFile(`uploads/products/${imageCoverFilename}`);
     req.body.imageCover = imageCoverFilename;
   }
+  next();
 
   if (req.files.images) {
     req.body.images = [];
-
     await Promise.all(
       req.files.images.map(async (file, i) => {
-        const imageFilename = `product-${uuid4()}-${Date.now()}-image-${i + 1
-          }.jpeg`;
+        const imageFilename = `product-${uuid4()}-${Date.now()}-image-${
+          i + 1
+        }.jpeg`;
 
         await sharp(file.buffer)
           .resize(2000, 1333)
@@ -71,7 +69,7 @@ exports.reziseMixofImages = expressAsyncHandler(async (req, res, next) => {
 
 //All products
 
-exports.getproducts = factory.getAll(productModel, 'productModel');
+exports.getproducts = factory.getAll(productModel, "productModel");
 
 //product By ID
 exports.getProduct = factory.getOne(productModel);

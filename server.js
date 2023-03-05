@@ -28,8 +28,14 @@ app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-
-
+//cors
+app.use(cors());
+app.options("*", cors());
+app.use(
+  cors({
+    methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
+  })
+);
 
 
 
@@ -41,15 +47,6 @@ app.use(bodyParser.json());
 //   console.log('CORS-enabled web server listening on port 80')
 // })
 
-
-
-
-
-
-
-
-
-
 const categoryRoute = require("./routes/categoryRoute");
 const productRoute = require("./routes/productRoute");
 const brandtRoute = require("./routes/brandRoute");
@@ -58,13 +55,6 @@ const orderRoute = require("./routes/orderRoute");
 //auth,user,cart
 
 const cartRoute = require("./routes/cartRoute");
-
-//cors
-app.use(cors());
-app.options("*", cors());
-app.use(compression());
-
-
 
 // userRouter ,authRouter
 //routes
@@ -76,9 +66,7 @@ app.use("/category", categoryRoute);
 app.use("/brands", brandtRoute);
 app.use("/oreders", orderRoute);
 
-
 app.use("/cart", cartRoute);
-
 
 //route is not exist
 app.all("*", (req, res, next) => {

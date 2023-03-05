@@ -5,8 +5,7 @@ const { v4: uuid4 } = require("uuid");
 const multer = require("multer");
 const bcrypt = require("bcryptjs");
 
-
-const { protect, authorize } = require('../middlewares/auth')
+const { protect, authorize } = require("../middlewares/auth");
 // import sharp from "sharp";
 // const storageMulter = multer.diskStorage({
 //   destination: function (req, file, cb) {
@@ -53,7 +52,6 @@ const resizeUserImg = expressAsyncHandler(async (req, res, next) => {
 //@route POST /users
 //@access public
 const createUser = expressAsyncHandler(async (req, res, next) => {
-
   const user = await User.create({
     ...req.body,
   });
@@ -81,11 +79,12 @@ const createUser = expressAsyncHandler(async (req, res, next) => {
 //@route GET /users
 //@access admin
 const getUsers = expressAsyncHandler(async (req, res) => {
-  const page = req.query.page * 1 || 1;
-  const limit = req.query.limit * 1 || 5;
-  const skip = (page - 1) * limit;
+  // const page = req.query.page * 1 || 1;
+  // const limit = req.query.limit * 1 || 5;
+  // const skip = (page - 1) * limit;
 
-  const users = await User.find({}).skip(skip).limit(limit);
+  // const users = await User.find({}).skip(skip).limit(limit);
+  const users = await User.find({});
   res.status(200).json({
     status: "success",
     result: users.length,
@@ -109,10 +108,35 @@ const getUsers = expressAsyncHandler(async (req, res) => {
 //@access admin
 const getUser = expressAsyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  if (id == req.user.id || req.user.role === 'admin') {
+  if (id == req.user.id || req.user.role === "admin") {
     console.log("req.user.id=", id, req.user, req.user.role);
 
     const user = await User.findById(id);
+
+    if (!user) {
+      return next(new ApiError(`User not found`, 404));
+    } else {
+      res.status(200).json({
+        status: "success",
+        data: {
+          user,
+        },
+      });
+    }
+  } else {
+    return next(new ApiError(`User not found`, 404));
+  }
+});
+
+const getUserByEmail = expressAsyncHandler(async (req, res, next) => {
+  const email = req.query.email;
+  const query = { "details.email": { email: email } };
+
+  if (email === req.user.email) {
+    console.log("req.user.email=", email, req.user, req.user.role);
+
+    const user = await User.findOne(query);
+    console.log(user);
 
     if (!user) {
       return next(new ApiError(`User not found`, 404));
@@ -140,16 +164,17 @@ const updateUser = expressAsyncHandler(async (req, res, next) => {
   // if(id === req.user.id || req.user.role === "admin"){
 
   const { name, profileImg, email, address, phone, password } = req.body;
-  if (req.user._id == id) {             ///// check that He is the profile owner
+
+  if (req.user._id == id) {
+    ///// check that He is the profile owner
     user = await User.findOneAndUpdate(
       { _id: id },
       { name, password, phone, email, address, profileImg },
       { new: true }
     );
   } else {
-    return next(new ApiError("You are not authorized", 401))
+    return next(new ApiError("You are not authorized", 401));
   }
-
 
   if (!user) {
     return next(new ApiError(`User not found`, 404));
@@ -183,6 +208,7 @@ module.exports = {
   createUser,
   getUsers,
   getUser,
+  getUserByEmail,
   updateUser,
   deleteUser,
   uploadUserImg,

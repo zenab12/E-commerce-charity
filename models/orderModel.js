@@ -47,16 +47,19 @@ const orderSchema = new mongoose.Schema(
             type: Boolean,
             default: false,
         },
-        deliverdAt: Date,
-    },
-    { timestamps: true }
+    deliverdAt: Date,
+  },
+
+  { timestamps: true }
 );
 
 //pre middleware for population
 orderSchema.pre(/^find/, function (next) {
-    this.populate({ path: 'user', select: 'name profileImg email phone' })
-        .populate({ path: 'cartItems.product', select: 'title imageCover' });
-    next();
+  this.populate({
+    path: "user",
+    select: "name profileImg email phone",
+  }).populate({ path: "cartItems.product", select: "title imageCover" });
+  next();
 });
 
-module.exports = mongoose.model('Order', orderSchema);
+module.exports = mongoose.model("Order", orderSchema);

@@ -32,6 +32,7 @@ const createUserValidator = [
       User.findOne({ email: val }).then((User) => {
         if (User) {
           return Promise.reject(new ApiError("email already exists", 401));
+          return Promise.reject(new ApiError("email already exists", 401));
           // return Promise.reject(new ApiError("email already exists",401));
         } else {
           return true;
@@ -57,9 +58,13 @@ const createUserValidator = [
     .notEmpty()
     .withMessage("password is required")
     .isLength({ min: 6 })
-    .withMessage("min length for password is 6 "),
+    .withMessage("min length for password is 6 ")
+    .isLength({ max: 20 })
+    .withMessage("max length for password is 20"),
+
   check("profileImg").optional(),
   check("role").optional(),
+  check("gender").notEmpty().withMessage("gender is required"),
 
   validatorMiddleware,
 ];
@@ -87,6 +92,7 @@ const updateUserValidator = [
           // return Promise.reject(new ApiError("email already exists",401));
 
           return new ApiError("email already exists", 401);
+          return new ApiError("email already exists", 401);
         } else {
           return true;
         }
@@ -112,8 +118,7 @@ const updateUserValidator = [
     .isLength({ min: 6 })
     .withMessage("min length for password is 6 ")
     .optional(),
-  // check("profileImg")
-  // .optional(),
+  check("profileImg").optional(),
   validatorMiddleware,
 ];
 const deleteUserValidator = [
