@@ -52,7 +52,7 @@ cat storage/jwtRS256.key.pub | base64 # edit JWT_ACCESS_TOKEN_SECRET_PUBLIC in .
 
 |        Commands 📜      |          Environment variables 🌐             |     Project Structure 🧱               |  api endponts  🐉             |           
 |-----------------------|------------------------------------------------|----------------------------------------|--------------------------------|
-| [Commands](#commands) | [Environment Variables](#environment-variables)| [Project Structure](#project-structure)| [API Endpoints](#api-endpoints)|                         |-----------------------|------------------------------------------------|----------------------------------------|--------------------------------| 
+| [Commands](#commands) | [Environment Variables](#environment-variables)| [Project Structure](#project-structure)| [API Endpoints](#api-endpoints-on-postman)|                         |-----------------------|------------------------------------------------|----------------------------------------|--------------------------------| 
       
 </div>
 
