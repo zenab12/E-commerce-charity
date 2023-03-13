@@ -106,20 +106,20 @@ userSchema.methods.getResetPasswordToken = function () {
 
   // Hash token and set to 
   this.passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
-  console.log("from user model",this.passwordResetToken);
+  console.log("from user model", this.passwordResetToken);
   // Set expire 
   this.passwordResetExpires = Date.now() + 10 * 60 * 1000;
-  
+
   return resetToken;
 }
 
 
 //return signed JWT 
-userSchema.methods.getSignedJwtToken = function(){
+userSchema.methods.getSignedJwtToken = function () {
   return jwt.sign({ userId: this._id }, process.env.JWT_SECRET);
 };
 
 //,{ expiresIn: process.env.JWT_EXPIRE}
 const User = mongoose.model("User", userSchema);
 module.exports = User;
-
+``
