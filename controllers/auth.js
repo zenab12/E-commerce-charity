@@ -67,7 +67,8 @@ exports.forgotPassword = expressAsyncHandler(async (req, res, next) => {
 
     // create reset url
     const resetUrl = `${req.protocol}://${req.get('host')}/auth/resetpassword/${resetToken}`;
-    const message = `${req.protocol}://localhost:4200/auth/resetpassword/${resetToken}`;
+    const message = `${req.protocol}:https://front-bpfexet09-harity.vercel.app/resetpassword/${resetToken}`;
+    // const message = `${req.protocol}://localhost:4200/auth/resetpassword/${resetToken}`;
     const yourUrl = `${resetUrl}`;
 
     await user.save();
@@ -127,7 +128,7 @@ const sendTokenResponse = (user, statusCode, res) => {
         httpOnly: true
     };
 
-    
+
     res.status(200).cookie('token', token, options).json({
         success: true,
         user,
