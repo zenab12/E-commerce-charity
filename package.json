@@ -24,7 +24,6 @@
     "bcryptjs": "^2.4.3",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
-    "crypto": "^1.0.1",
     "dotenv": "^16.0.3",
     "ejs": "^3.1.8",
     "express": "^4.18.2",
@@ -39,6 +38,7 @@
     "nodemon": "^2.0.20",
     "sharp": "^0.31.3",
     "slugify": "^1.6.5",
+    "ssb-blob-files": "^1.2.1",
     "uuid": "^9.0.0",
     "win-node-env": "^0.6.1"
   }
