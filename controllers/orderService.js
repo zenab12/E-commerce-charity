@@ -40,7 +40,6 @@ exports.createCashOrder = asyncHandler(async (req, res, next) => {
         const bulkOption = cart.cartItems.map((item) => ({
             updateOne: {
                 filter: { _id: item.product },
-                // update: { $inc: { quantity: -item.quantity } },
                 update: { $inc: { sold: +item.quantity, quantity: -item.quantity } },
             }
         }))

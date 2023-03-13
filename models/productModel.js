@@ -32,7 +32,7 @@ const productSchema = new mongoose.Schema(
     },
     sold: {
       type: Number,
-      default: 0, // nothing sold yet it starts with  0
+      default: 0,
     },
     price: {
       type: Number,
